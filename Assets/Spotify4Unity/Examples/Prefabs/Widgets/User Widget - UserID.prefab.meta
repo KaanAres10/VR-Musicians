@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d1255c066c19d964d91c945fcd50e6c1
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Prefabs/Widgets/User Widget - UserID.prefab
+  uploadId: 446514

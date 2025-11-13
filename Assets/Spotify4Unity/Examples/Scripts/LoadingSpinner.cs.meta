@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d3ce54fb90e1c5142b1a3b4f556df80c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Scripts/LoadingSpinner.cs
+  uploadId: 446514

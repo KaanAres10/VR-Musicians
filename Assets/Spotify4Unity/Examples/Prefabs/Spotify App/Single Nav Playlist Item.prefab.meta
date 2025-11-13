@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5fcd1fdbbd83e2648bc755a955fc076f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Prefabs/Spotify App/Single Nav Playlist
+    Item.prefab
+  uploadId: 446514
