@@ -27,5 +27,5 @@ public class AuthorizationConfig : MonoBehaviour
     /// Port number to use for recieving Spotify auth from the browser. Should be the same value in your Redirect uri
     /// Don't change this if you don't know what you are doing
     /// </summary>
-    public int ServerPort = 5000;
+    public int ServerPort = 7777;
 }

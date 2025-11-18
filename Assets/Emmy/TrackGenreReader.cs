@@ -13,13 +13,27 @@ public class TrackGenreReader : MonoBehaviour
 
     private async void Start()
     {
+        // Don’t do anything if we’re not actually in Play mode
+        if (!Application.isPlaying)
+            return;
+
         // Wait until SpotifyService is up & authenticated
         await WaitForSpotifyReady();
 
-        _client = SpotifyService.Instance.GetSpotifyClient();
+        if (!_isRunning)  // object might have been destroyed while waiting
+            return;
+
+        var service = SpotifyService.Instance;
+        if (service == null || !service.IsConnected)
+        {
+            Debug.LogError("SpotifyService is not connected after waiting.");
+            return;
+        }
+
+        _client = service.GetSpotifyClient();
         if (_client == null)
         {
-            Debug.LogError("Spotify client is null � is auth done?");
+            Debug.LogError("Spotify client is null – is auth done?");
             return;
         }
 
@@ -35,7 +49,7 @@ public class TrackGenreReader : MonoBehaviour
 
     private async Task MonitorCurrentTrackLoop()
     {
-        while (_isRunning)
+        while (_isRunning && Application.isPlaying)
         {
             try
             {
@@ -65,7 +79,7 @@ public class TrackGenreReader : MonoBehaviour
                 Debug.LogError($"Error while checking current track: {e}");
             }
 
-            // Wait before next check (don�t spam the API)
+            // Wait before next check (don’t spam the API)
             int ms = Mathf.Max(1000, Mathf.RoundToInt(pollIntervalSeconds * 1000f));
             await Task.Delay(ms);
         }
@@ -95,7 +109,14 @@ public class TrackGenreReader : MonoBehaviour
 
     private async Task WaitForSpotifyReady()
     {
-        while (SpotifyService.Instance == null || !SpotifyService.Instance.IsConnected)
+        // Only poll while in Play mode AND while this object is alive
+        while (Application.isPlaying && _isRunning)
+        {
+            var service = SpotifyService.Instance;
+            if (service != null && service.IsConnected)
+                break;
+
             await Task.Yield();
+        }
     }
 }
