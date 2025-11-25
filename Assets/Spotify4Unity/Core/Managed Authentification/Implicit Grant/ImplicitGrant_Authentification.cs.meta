@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8f4c650efb5adfa4ca42e87d242df9ea
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Core/Managed Authentification/Implicit Grant/ImplicitGrant_Authentification.cs
+  uploadId: 446514

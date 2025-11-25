@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4ca095009a7b5614580999ff0106e437
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Materials/SpotifyPallet_ActiveGreen.mat
+  uploadId: 446514

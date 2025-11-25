@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 388be8cfc6b1fdc4ca49ecbf152779d3
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Prefabs/Spotify App/Single Playlist Track.prefab
+  uploadId: 446514

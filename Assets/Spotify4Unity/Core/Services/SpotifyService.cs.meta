@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f89aa3cd9589e984391abe1cde2d76ef
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Core/Services/SpotifyService.cs
+  uploadId: 446514
