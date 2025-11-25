@@ -3447,7 +3447,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 448845041}
-  - component: {fileID: 448845040}
+  - component: {fileID: 448845042}
   m_Layer: 0
   m_Name: TrackGenreReader
   m_TagString: Untagged
@@ -3455,19 +3455,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &448845040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 448845039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1866fe612377b234a9a3ce93a7271cda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
-  pollIntervalSeconds: 3
 --- !u!4 &448845041
 Transform:
   m_ObjectHideFlags: 0
@@ -3483,6 +3470,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &448845042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448845039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6a6927ffc6a471d95287bcc3b82b21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
+  pollIntervalSeconds: 3
 --- !u!1 &457883420
 GameObject:
   m_ObjectHideFlags: 0
@@ -12787,8 +12787,8 @@ MonoBehaviour:
   - user-read-private
   - user-read-recently-played
   - user-top-read
-  RedirectUri: http://127.0.0.1:5000/callback
-  ServerPort: 5000
+  RedirectUri: http://127.0.0.1:7777/callback
+  ServerPort: 7777
   Length: 100
   Verifier: 
   TokenSaveType: 0

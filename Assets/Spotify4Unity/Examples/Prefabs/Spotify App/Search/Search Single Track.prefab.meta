@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ac1eeb3a0553a224aa4660b628936af8
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Prefabs/Spotify App/Search/Search Single
+    Track.prefab
+  uploadId: 446514

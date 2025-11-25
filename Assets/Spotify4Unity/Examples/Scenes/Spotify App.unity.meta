@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8e76123246cebb545917c7ce05bcfcab
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Scenes/Spotify App.unity
+  uploadId: 446514

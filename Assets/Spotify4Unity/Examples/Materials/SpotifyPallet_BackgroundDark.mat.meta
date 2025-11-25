@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4df431b3a42156e4fb9b01a4bdceeb3b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Materials/SpotifyPallet_BackgroundDark.mat
+  uploadId: 446514

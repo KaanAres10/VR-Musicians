@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4c12b618330d0f9498b6f1d850e0e6f9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Scripts/Landing Scene/ArtistWidgetController.cs
+  uploadId: 446514

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eb019d1ba7389b84bb84cd13c5dc0adb
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Spotify4Unity_v2.0.1_Documentation.html
+  uploadId: 446514

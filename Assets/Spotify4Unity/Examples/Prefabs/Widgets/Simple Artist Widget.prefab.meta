@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a06f1da413eb13a4caf68e7d60b7f894
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Examples/Prefabs/Widgets/Simple Artist Widget.prefab
+  uploadId: 446514

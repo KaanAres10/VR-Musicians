@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1e35b30bc0eb2ca40ab19f36bbb5e9e3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 129028
+  packageName: S4U - Automatic Spotify Integration
+  packageVersion: 2.0.1
+  assetPath: Assets/Spotify4Unity/Core/Managed Authentification/AuthorizationConfig.cs
+  uploadId: 446514
