@@ -1350,7 +1350,10 @@ MonoBehaviour:
   globalVolume: {fileID: 1117336388}
   rockProfile: {fileID: 11400000, guid: d8287028555913e43be9f7d5672b6d2c, type: 2}
   popProfile: {fileID: 11400000, guid: cb6aab413adab2141bd2e51ccbeb2384, type: 2}
-  otherProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
+  classicProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
+  rapProfile: {fileID: 11400000, guid: 0808ad2821ec1db41937560278b94f6c, type: 2}
+  countryProfile: {fileID: 11400000, guid: f664bf2deefcfd545a286e3018cd7472, type: 2}
+  defaultProfile: {fileID: 11400000, guid: 9edac54c7ab31a745805939bf01cc864, type: 2}
   pollIntervalSeconds: 3
 --- !u!4 &96099887
 Transform:
@@ -12802,7 +12805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f89aa3cd9589e984391abe1cde2d76ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AuthorizeUserOnStart: 0
+  AuthorizeUserOnStart: 1
   AuthType: 0
   _authMethodConfig: {fileID: 0}
 --- !u!4 &1084520806
@@ -13373,7 +13376,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 9edac54c7ab31a745805939bf01cc864, type: 2}
 --- !u!4 &1117336389
 Transform:
   m_ObjectHideFlags: 0

@@ -43,7 +43,10 @@ public class TrackGenreReader : MonoBehaviour
     public Volume globalVolume;
     public VolumeProfile rockProfile;
     public VolumeProfile popProfile;
-    public VolumeProfile otherProfile;
+    public VolumeProfile classicProfile;
+    public VolumeProfile rapProfile;
+    public VolumeProfile countryProfile;
+    public VolumeProfile defaultProfile;
 
     [Tooltip("How often to check Spotify for a new track (seconds).")]
     public float pollIntervalSeconds = 3f;
@@ -71,12 +74,15 @@ public class TrackGenreReader : MonoBehaviour
             return;
         }
 
-        VolumeProfile targetProfile = otherProfile; // default
+        VolumeProfile targetProfile = defaultProfile;
 
         if (genres != null && genres.Count > 0)
         {
             bool isRock = false;
             bool isPop  = false;
+            bool isClassic = false;
+            bool isRap = false;
+            bool isCountry = false;
 
             foreach (var g in genres)
             {
@@ -86,6 +92,9 @@ public class TrackGenreReader : MonoBehaviour
                 string gl = g.ToLowerInvariant();
                 if (gl.Contains("rock")) isRock = true;
                 if (gl.Contains("pop"))  isPop  = true;
+                if (gl.Contains("classic")) isClassic = true;
+                if (gl.Contains("rap")) isRap = true;
+                if (gl.Contains("country")) isCountry = true;
             }
 
             if (isRock && rockProfile != null)
@@ -97,15 +106,27 @@ public class TrackGenreReader : MonoBehaviour
             {
                 targetProfile = popProfile;
                 Debug.Log("Applying Pop Profile");
+            } else if (isClassic && classicProfile != null)
+            {
+                targetProfile = classicProfile;
+                Debug.Log("Applying Classic Profile");
+            } else if (isRap && rapProfile != null)
+            {
+                targetProfile = rapProfile;
+                Debug.Log("Applying Rap Profile");
+            } else if (isCountry && countryProfile != null)
+            {
+                targetProfile = countryProfile;
+                Debug.Log("Applying Country Profile");
             }
             else
             {
-                Debug.Log("Applying Other Profile");
+                Debug.Log("Applying Default Profile");
             }
         }
         else
         {
-            Debug.Log("Genre: NONE, Applying Other Profile");
+            Debug.Log("Genre: NONE, Applying Default Profile");
         }
 
         if (targetProfile == null)
