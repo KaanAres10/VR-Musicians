@@ -58,6 +58,10 @@ public class TrackGenreReader : MonoBehaviour
         new Dictionary<string, ReccoAudioFeatures>();
 
 
+    // To get features for spawn enermies
+    public ReccoAudioFeatures CurrentAudioFeatures { get; private set; }
+
+
     private async void Start()
     {
         // Don’t do anything if we’re not in Play mode
@@ -205,11 +209,20 @@ public class TrackGenreReader : MonoBehaviour
             // audio features via ReccoBeats
             var features = await GetReccoBeatsFeaturesForSpotifyTrack(track.Id);
 
-            if (features == null)
+            if (features != null)
+            {
+                CurrentAudioFeatures = features;
+            } else
             {
                 Debug.LogWarning("No ReccoBeats audio features returned for this track.");
                 return;
             }
+
+            //if (features == null)
+            //{
+            //    Debug.LogWarning("No ReccoBeats audio features returned for this track.");
+            //    return;
+            //}
 
             Debug.Log(
                 $"ReccoBeats features for {track.Name}:\n" +

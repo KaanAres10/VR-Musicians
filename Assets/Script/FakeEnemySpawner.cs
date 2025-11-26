@@ -1,12 +1,12 @@
 using UnityEngine;
 using static TrackGenreReader;
 
-public class EnemySpawner : MonoBehaviour
+public class FakeEnemySpawner : MonoBehaviour
 {
     public Transform player;
     public GameObject enemyPrefab;
 
-    public TrackGenreReader trackReader;
+    public FakeSpotify trackReader;
     private float energy;
 
 
@@ -16,12 +16,12 @@ public class EnemySpawner : MonoBehaviour
     float timer = 0f;
 
 
-   
+
     void Update()
     {
-        if (trackReader.CurrentAudioFeatures != null)
+        if (trackReader.fakeFeatures != null)
         {
-            energy = trackReader.CurrentAudioFeatures.energy;
+            energy = trackReader.fakeFeatures.energy;
         }
 
 
@@ -58,11 +58,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (energy < 0.7f)
         {
-            return 1f + 2f * energy;      // 3 ~ 6.5
+            return 1f + 2f * energy;      
         }
         else
         {
-            return 1.5f + 2f * energy;      // 8.5 ~ 10
+            return 1.5f + 2f * energy;     
         }
     }
 
