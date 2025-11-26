@@ -3,6 +3,7 @@ using SpotifyAPI.Web;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
 
 public class TrackGenreReader : MonoBehaviour
 {
@@ -38,7 +39,14 @@ public class TrackGenreReader : MonoBehaviour
         public float valence;
     }
 
-
+    [Header("Post-Processing")]
+    public Volume globalVolume;
+    public VolumeProfile rockProfile;
+    public VolumeProfile popProfile;
+    public VolumeProfile classicProfile;
+    public VolumeProfile rapProfile;
+    public VolumeProfile countryProfile;
+    public VolumeProfile defaultProfile;
 
     [Tooltip("How often to check Spotify for a new track (seconds).")]
     public float pollIntervalSeconds = 3f;
@@ -57,6 +65,78 @@ public class TrackGenreReader : MonoBehaviour
     private readonly Dictionary<string, ReccoAudioFeatures> _featuresCache =
         new Dictionary<string, ReccoAudioFeatures>();
 
+
+    private void ApplyPostProcessingForGenre(IList<string> genres)
+    {
+        if (globalVolume == null)
+        {
+            Debug.LogWarning("Global Volume is not assigned on TrackGenreReader.");
+            return;
+        }
+
+        VolumeProfile targetProfile = defaultProfile;
+
+        if (genres != null && genres.Count > 0)
+        {
+            bool isRock = false;
+            bool isPop  = false;
+            bool isClassic = false;
+            bool isRap = false;
+            bool isCountry = false;
+
+            foreach (var g in genres)
+            {
+                if (string.IsNullOrEmpty(g))
+                    continue;
+
+                string gl = g.ToLowerInvariant();
+                if (gl.Contains("rock")) isRock = true;
+                if (gl.Contains("pop"))  isPop  = true;
+                if (gl.Contains("classic")) isClassic = true;
+                if (gl.Contains("rap")) isRap = true;
+                if (gl.Contains("country")) isCountry = true;
+            }
+
+            if (isRock && rockProfile != null)
+            {
+                targetProfile = rockProfile;
+                Debug.Log("Applying Rock Profile");
+            }
+            else if (isPop && popProfile != null)
+            {
+                targetProfile = popProfile;
+                Debug.Log("Applying Pop Profile");
+            } else if (isClassic && classicProfile != null)
+            {
+                targetProfile = classicProfile;
+                Debug.Log("Applying Classic Profile");
+            } else if (isRap && rapProfile != null)
+            {
+                targetProfile = rapProfile;
+                Debug.Log("Applying Rap Profile");
+            } else if (isCountry && countryProfile != null)
+            {
+                targetProfile = countryProfile;
+                Debug.Log("Applying Country Profile");
+            }
+            else
+            {
+                Debug.Log("Applying Default Profile");
+            }
+        }
+        else
+        {
+            Debug.Log("Genre: NONE, Applying Default Profile");
+        }
+
+        if (targetProfile == null)
+        {
+            Debug.LogWarning("Target VolumeProfile is null, nothing to apply.");
+            return;
+        }
+
+        globalVolume.profile = targetProfile;
+    }
 
     private async void Start()
     {
@@ -196,10 +276,14 @@ public class TrackGenreReader : MonoBehaviour
             {
                 Debug.Log($"Artist: {artist.Name}");
                 Debug.Log("Genres: " + string.Join(", ", artist.Genres));
+                
+                ApplyPostProcessingForGenre(artist.Genres);
+
             }
             else
             {
                 Debug.Log($"No genre data available for artist: {artist.Name}");
+                ApplyPostProcessingForGenre(null);
             }
 
             // audio features via ReccoBeats
