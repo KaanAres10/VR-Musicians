@@ -3,12 +3,21 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     public float speed = 3f;  
-    Transform player;
+     Transform player;
 
-    void Start()
+    void Awake()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        GameObject target = GameObject.FindWithTag("PlayerBat");
+        if (target != null)
+        {
+            player = target.transform;
+        }
+        else
+        {
+            Debug.LogError("No GameObject with tag 'PlayerBat' found in the scene!");
+        }
     }
+
 
     void Update()
     {

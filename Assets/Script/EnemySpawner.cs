@@ -16,7 +16,10 @@ public class EnemySpawner : MonoBehaviour
     float timer = 0f;
 
 
-   
+    public float minInterval = 3f;
+    public float maxInterval = 5f;
+
+
     void Update()
     {
         if (trackReader.CurrentAudioFeatures != null)
@@ -26,8 +29,6 @@ public class EnemySpawner : MonoBehaviour
 
 
 
-        float minInterval = 0.5f;
-        float maxInterval = 1.5f;
         spawnInterval = Mathf.Lerp(maxInterval, minInterval, energy); // higher energy - spawn enermy faster and increase moving speed, and more enermies
 
         timer += Time.deltaTime;
@@ -46,11 +47,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (energy < 0.7f)
         {
-            return Mathf.CeilToInt(5 + 5 * energy);
+            return Mathf.CeilToInt(1 + 3 * energy);
         }
         else
         {
-            return Mathf.CeilToInt(8 + 8 * energy);
+            return Mathf.CeilToInt(2+ 5 * energy);
         }
     }
 
@@ -58,11 +59,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (energy < 0.7f)
         {
-            return 1f + 2f * energy;      // 3 ~ 6.5
+            return 1f + 1f * energy;      // 3 ~ 6.5
         }
         else
         {
-            return 1.5f + 2f * energy;      // 8.5 ~ 10
+            return 1.5f + 1.5f * energy;      // 8.5 ~ 10
         }
     }
 

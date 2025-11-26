@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Anchor
   - Enemy
+  - PlayerBat
   layers:
   - Default
   - TransparentFX
