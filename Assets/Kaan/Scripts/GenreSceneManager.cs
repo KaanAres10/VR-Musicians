@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GenreSceneManager : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class GenreSceneManager : MonoBehaviour
     public Material rapSkybox;
     public Material countrySkybox;
     public Material defaultSkybox;
+
+    [Header("Player")]
+    public Transform playerTransform;
 
     private string _currentEnvScene = "null";
     private bool _isSwitching = false;
@@ -103,7 +107,49 @@ public class GenreSceneManager : MonoBehaviour
         if (loadOp != null)
             yield return loadOp;
 
+        AlignPlayerToRandomSpawn(newScene);
+
+
         _currentEnvScene = newScene;
         _isSwitching = false;
+    }
+
+    private void AlignPlayerToRandomSpawn(string sceneName)
+    {
+        if (playerTransform == null)
+        {
+            Debug.LogWarning("GenreSceneManager: playerTransform not assigned.");
+            return;
+        }
+
+        Scene envScene = SceneManager.GetSceneByName(sceneName);
+        if (!envScene.isLoaded)
+        {
+            Debug.LogWarning($"GenreSceneManager: scene {sceneName} not loaded yet.");
+            return;
+        }
+
+        List<Transform> spawnPoints = new List<Transform>();
+        GameObject[] roots = envScene.GetRootGameObjects();
+
+        foreach (GameObject root in roots)
+        {
+            if (root.name.StartsWith("PlayerSpawn"))
+                spawnPoints.Add(root.transform);
+        }
+
+        if (spawnPoints.Count == 0)
+        {
+            Debug.LogWarning($"GenreSceneManager: No PlayerSpawn* found in scene {sceneName}.");
+            return;
+        }
+
+        // Pick random spawn
+        Transform pick = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+        playerTransform.position = pick.position;
+        playerTransform.rotation = pick.rotation;
+
+        Debug.Log($"[GenreSceneManager] Spawned player at {pick.name} in {sceneName}");
     }
 }
