@@ -14,6 +14,14 @@ public class GenreSceneManager : MonoBehaviour
     public string countrySceneName = "Env_Country";
     public string defaultSceneName = "Env_Default";
 
+    [Header("Skyboxes")]
+    public Material rockSkybox;
+    public Material popSkybox;
+    public Material classicSkybox;
+    public Material rapSkybox;
+    public Material countrySkybox;
+    public Material defaultSkybox;
+
     private string _currentEnvScene = "null";
     private bool _isSwitching = false;
 
@@ -28,9 +36,30 @@ public class GenreSceneManager : MonoBehaviour
         DontDestroyOnLoad(gameObject); // keep across scene loads if needed
     }
 
+    private void ApplySkybox(MusicGenre genre)
+    {
+        Material sky = defaultSkybox;
+
+        switch (genre)
+        {
+            case MusicGenre.Rock: sky = rockSkybox; break;
+            case MusicGenre.Pop: sky = popSkybox; break;
+            case MusicGenre.Classic: sky = classicSkybox; break;
+            case MusicGenre.Rap: sky = rapSkybox; break;
+            case MusicGenre.Country: sky = countrySkybox; break;
+        }
+
+        RenderSettings.skybox = sky;
+
+        // optional: force update ambient lighting
+        DynamicGI.UpdateEnvironment();
+    }
+
     public void SetGenre(MusicGenre genre)
     {
         if (_isSwitching) return;
+
+        ApplySkybox(genre);
 
         string targetScene = GetSceneNameForGenre(genre);
         if (string.IsNullOrEmpty(targetScene)) return;

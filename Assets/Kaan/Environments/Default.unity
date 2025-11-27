@@ -1281,6 +1281,12 @@ MonoBehaviour:
   rapSceneName: Env_Rap
   countrySceneName: Env_Country
   defaultSceneName: PostProcess
+  rockSkybox: {fileID: 2100000, guid: 5cb41aefde75aab4398926231941ac6b, type: 2}
+  popSkybox: {fileID: 2100000, guid: ec46d2188d4b8774e847e75f1e12a8db, type: 2}
+  classicSkybox: {fileID: 2100000, guid: 23916da3af1104b4abeb3b9be53334b1, type: 2}
+  rapSkybox: {fileID: 2100000, guid: 5334f277fcb843944aebc29131d0b5a6, type: 2}
+  countrySkybox: {fileID: 2100000, guid: f14e791cab3ea0c4397ab4827d05bebc, type: 2}
+  defaultSkybox: {fileID: 2100000, guid: f14e791cab3ea0c4397ab4827d05bebc, type: 2}
 --- !u!4 &1710711581
 Transform:
   m_ObjectHideFlags: 0
