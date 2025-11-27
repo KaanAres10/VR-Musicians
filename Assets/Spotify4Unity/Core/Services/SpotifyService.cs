@@ -339,4 +339,17 @@ public class SpotifyService : SceneSingleton<SpotifyService>
         }
         return DateTime.MinValue;
     }
+
+    // Reauthorize
+    public void ResetAndReauthorize(bool removeSavedAuth = true)
+    {
+        // Clear current client
+        DeauthorizeUser(removeSavedAuth);
+
+        // Start the login flow again
+        AuthorizeUser();
+    }
+
 }
+
+

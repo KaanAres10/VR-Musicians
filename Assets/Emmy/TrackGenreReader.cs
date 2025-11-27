@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Generic;
 
+
 public class TrackGenreReader : MonoBehaviour
 {
     [System.Serializable]
@@ -119,6 +120,26 @@ public class TrackGenreReader : MonoBehaviour
                         _lastTrackId = null;
                         Debug.Log("No track is currently playing.");
                     }
+                }
+            }
+
+            catch (APIException apiEx)
+            {
+                Debug.LogError($"Spotify API error while checking current track: {apiEx}");
+
+                if (IsInvalidGrant(apiEx))
+                {
+                    Debug.LogWarning("Got invalid_grant. Forcing re-auth via SpotifyService...");
+
+                    bool ok = await TryReauthenticateAndUpdateClient();
+                    if (!ok)
+                    {
+                        Debug.LogError("Re-authentication failed. Stopping monitoring loop.");
+                        _isRunning = false;
+                        break;
+                    }
+
+                    continue;
                 }
             }
             catch (System.Exception e)
@@ -249,6 +270,61 @@ public class TrackGenreReader : MonoBehaviour
                 break;
 
             await Task.Yield();
+        }
+    }
+
+    private bool IsInvalidGrant(APIException ex)
+    {
+        if (ex.Message != null && ex.Message.Contains("invalid_grant"))
+            return true;
+
+        var bodyObj = ex.Response?.Body;
+        string body = bodyObj?.ToString();
+
+        if (!string.IsNullOrEmpty(body) && body.Contains("invalid_grant"))
+            return true;
+
+        return false;
+    }
+
+
+    private async Task<bool> TryReauthenticateAndUpdateClient()
+    {
+        var service = SpotifyService.Instance;
+        if (service == null)
+        {
+            Debug.LogError("SpotifyService.Instance is null, cannot re-authenticate.");
+            return false;
+        }
+
+        try
+        {
+            // clear tokens + start login flow again
+            service.ResetAndReauthorize(removeSavedAuth: true);
+
+            // wait until SpotifyService reports that it’s connected again
+            await WaitForSpotifyReady();
+
+            if (!service.IsConnected)
+            {
+                Debug.LogError("SpotifyService is still not connected after re-authentication.");
+                return false;
+            }
+
+            _client = service.GetSpotifyClient();
+            if (_client == null)
+            {
+                Debug.LogError("Spotify client is null after re-authentication.");
+                return false;
+            }
+
+            Debug.Log("Re-authentication successful, SpotifyClient updated.");
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Failed to re-authenticate: {e}");
+            return false;
         }
     }
 
