@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Kaan/Environments/Env_Country.unity
     guid: a8544a7ae56e2d74fa9bfb9b51319c6d
   - enabled: 1
-    path: Assets/Kaan/Environments/Env_Rockk.unity
+    path: Assets/Kaan/Environments/Env_Rap.unity
     guid: 5997c9072e7d9eb4eb61d8526d39b47f
   - enabled: 1
     path: Assets/Kaan/Environments/Env_Classic.unity

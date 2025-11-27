@@ -131,7 +131,7 @@ public class TrackGenreReader : MonoBehaviour
                 if (gl.Contains("rock")) isRock = true;
                 if (gl.Contains("pop"))  isPop  = true;
                 if (gl.Contains("classic")) isClassic = true;
-                if (gl.Contains("rap")) isRap = true;
+                if (gl.Contains("rap") || gl.Contains("hiphop") || gl.Contains("hip hop") || gl.Contains("hip-hop")) isRap = true;
                 if (gl.Contains("country")) isCountry = true;
             }
 
