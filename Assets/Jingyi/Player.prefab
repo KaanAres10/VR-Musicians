@@ -392,6 +392,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  trackReader: {fileID: 0}
+  energy: 0
   healthBar: {fileID: 5406164794251508719}
 --- !u!1 &2825015819159800013
 GameObject:

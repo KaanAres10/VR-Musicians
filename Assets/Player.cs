@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    public int maxHealth = 100;
-    public int currentHealth;
-    
+    public float maxHealth = 100f;
+    public float currentHealth;
 
     public TrackGenreReader trackReader;
     public float energy = 0f;
@@ -18,6 +14,7 @@ public class Player : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetHealth(currentHealth);
     }
 
     void Update()
@@ -27,56 +24,50 @@ public class Player : MonoBehaviour
             energy = trackReader.CurrentAudioFeatures.energy;
         }
 
-
         AutoRegenHealth();
     }
 
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
 
         healthBar.SetHealth(currentHealth);
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0f)
         {
             Die();
         }
     }
 
-    void Die()
+    void AutoRegenHealth()
     {
-        Debug.Log("Player Died");
-        GameManager.Instance?.EndGame();
+        if (currentHealth >= maxHealth)
+            return;
+
+        float recoverRate = recoverHealthSpeed(energy); // HP per second
+        float regenAmount = recoverRate * Time.deltaTime;
+
+        currentHealth += regenAmount;
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+
+        healthBar.SetHealth(currentHealth);
     }
 
     float recoverHealthSpeed(float energy)
     {
         if (energy < 0.7f)
         {
-            return 1f + 1f * energy;      // 3 ~ 6.5
+            if (energy < 0.1f)
+            {
+                return  1.0f / (2 * energy);
+            }
+            return 1.0f / energy;      
         }
         else
         {
-            return 1.5f + 1.5f * energy;      // 8.5 ~ 10
+            return 1.0f / energy;  
         }
-    }
-
-    void AutoRegenHealth()
-    {
-       
-        if (currentHealth >= maxHealth)
-            return;
-
-        float recoverRate = recoverHealthSpeed(energy);
-
-    
-        float regenAmount = energy * recoverRate * Time.deltaTime;
-
-        currentHealth += Mathf.RoundToInt(regenAmount);
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        healthBar.SetHealth(currentHealth);
     }
 
     void OnTriggerEnter(Collider other)
@@ -87,5 +78,9 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    void Die()
+    {
+        Debug.Log("Player Died");
+        GameManager.Instance?.EndGame();
+    }
 }
