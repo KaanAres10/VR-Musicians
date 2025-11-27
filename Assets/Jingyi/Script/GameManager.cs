@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("score: "+score);
     }
 
-    private void EndGame()
+    public void EndGame()
     {
         UIManager.Instance?.ShowEndPanel();
         Time.timeScale = 0f;

@@ -7,14 +7,14 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
-        GameObject target = GameObject.FindWithTag("PlayerBat");
+        GameObject target = GameObject.FindWithTag("Player");
         if (target != null)
         {
             player = target.transform;
         }
         else
         {
-            Debug.LogError("No GameObject with tag 'PlayerBat' found in the scene!");
+            Debug.LogError("No GameObject with tag 'Player' found in the scene!");
         }
     }
 

@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI timerText;
     public GameObject endPanel;
+    public TextMeshProUGUI finalScoreText;
 
     void Awake()
     {
@@ -25,6 +26,9 @@ public class UIManager : MonoBehaviour
     {
         if (scoreText != null)
             scoreText.text = $"Score: {score}";
+
+        if (finalScoreText != null)
+            finalScoreText.text = $"Score: {score}";
     }
 
    
