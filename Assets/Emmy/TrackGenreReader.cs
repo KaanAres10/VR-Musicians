@@ -68,6 +68,41 @@ public class TrackGenreReader : MonoBehaviour
 
     // To get features for spawn enermies
     public ReccoAudioFeatures CurrentAudioFeatures { get; private set; }
+    
+    
+    private MusicGenre MapGenresToMusicGenre(IList<string> genres)
+    {
+        if (genres == null || genres.Count == 0)
+            return MusicGenre.Default;
+
+        bool isRock    = false;
+        bool isPop     = false;
+        bool isClassic = false;
+        bool isRap     = false;
+        bool isCountry = false;
+
+        foreach (var g in genres)
+        {
+            if (string.IsNullOrEmpty(g))
+                continue;
+
+            string gl = g.ToLowerInvariant();
+
+            if (gl.Contains("rock"))    isRock = true;
+            if (gl.Contains("pop"))     isPop = true;
+            if (gl.Contains("classic")) isClassic = true;   // classical, classic rock etc.
+            if (gl.Contains("rap") || gl.Contains("hip hop") || gl.Contains("hip-hop")) isRap = true;
+            if (gl.Contains("country")) isCountry = true;
+        }
+
+        if (isRock)    return MusicGenre.Rock;
+        if (isPop)     return MusicGenre.Pop;
+        if (isClassic) return MusicGenre.Classic;
+        if (isRap)     return MusicGenre.Rap;
+        if (isCountry) return MusicGenre.Country;
+
+        return MusicGenre.Default;
+    }
 
     private void ApplyPostProcessingForGenre(IList<string> genres)
     {
@@ -96,7 +131,7 @@ public class TrackGenreReader : MonoBehaviour
                 if (gl.Contains("rock")) isRock = true;
                 if (gl.Contains("pop"))  isPop  = true;
                 if (gl.Contains("classic")) isClassic = true;
-                if (gl.Contains("rap")) isRap = true;
+                if (gl.Contains("rap") || gl.Contains("hiphop") || gl.Contains("hip hop") || gl.Contains("hip-hop")) isRap = true;
                 if (gl.Contains("country")) isCountry = true;
             }
 
@@ -281,12 +316,22 @@ public class TrackGenreReader : MonoBehaviour
                 Debug.Log("Genres: " + string.Join(", ", artist.Genres));
                 
                 ApplyPostProcessingForGenre(artist.Genres);
-
+                
+                MusicGenre mg = MapGenresToMusicGenre(artist.Genres);
+                if (GenreSceneManager.Instance != null)
+                {
+                    GenreSceneManager.Instance.SetGenre(mg);
+                }
             }
             else
             {
                 Debug.Log($"No genre data available for artist: {artist.Name}");
                 ApplyPostProcessingForGenre(null);
+                
+                if (GenreSceneManager.Instance != null)
+                {
+                    GenreSceneManager.Instance.SetGenre(MusicGenre.Default);
+                }
             }
 
             // audio features via ReccoBeats
