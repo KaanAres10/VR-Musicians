@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public float gameDuration = 180f;  
 
     private float remainingTime;
+
+    [SerializeField]
     private int score = 0;
     private bool isRunning = true;
 

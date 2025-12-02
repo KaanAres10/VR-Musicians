@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
         AutoRegenHealth();
     }
 
-    void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
@@ -70,13 +70,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+   /* void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             TakeDamage(1);
         }
-    }
+    }*/
 
     void Die()
     {

@@ -32,4 +32,26 @@ public class Enemy : MonoBehaviour
     {
         speed = newSpeed;
     }
+
+    // take damage
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("1 health damage");
+            other.GetComponent<Player>().TakeDamage(1);
+            
+        }
+
+        if (other.CompareTag("PlayerBat"))
+        {
+
+            GameManager.Instance.AddScore(1);
+
+            Debug.Log("hit enemy");
+            Destroy(gameObject);
+        }
+    }
+
+
 }
