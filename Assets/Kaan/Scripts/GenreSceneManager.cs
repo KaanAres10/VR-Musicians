@@ -39,8 +39,12 @@ public class GenreSceneManager : MonoBehaviour
 
     [Header("Dynamic Hue (Pop Only)")]
     public bool enablePopDynamicHue = true;
-    [Tooltip("How fast hue shifts (degrees per second).")]
-    public float popHueSpeed = 50f;
+    [Header("Music Reactivity (Pop)")]
+    public TrackGenreReader trackReader;
+    [Tooltip("Hue speed when energy = 0")]
+    public float minHueSpeed = 10f;
+    [Tooltip("Hue speed when energy = 1")]
+    public float maxHueSpeed = 100f;
     [Tooltip("Minimum hue value (degrees).")]
     public float popHueMin = -60f;
     [Tooltip("Maximum hue value (degrees).")]
@@ -51,6 +55,9 @@ public class GenreSceneManager : MonoBehaviour
 
     private MusicGenre _currentGenre = MusicGenre.Default;
     private ColorAdjustments _popColorAdjust;
+
+    private float _popHueDirection = 1f;
+    private float _nextFlipTime = 0f;
 
 
     private void Awake()
@@ -66,7 +73,6 @@ public class GenreSceneManager : MonoBehaviour
 
     private void Update()
     {
-        // Only animate when Pop is active and dynamic hue is enabled
         if (!enablePopDynamicHue) return;
         if (_currentGenre != MusicGenre.Pop) return;
         if (_popColorAdjust == null) return;
@@ -74,10 +80,25 @@ public class GenreSceneManager : MonoBehaviour
         float range = popHueMax - popHueMin;
         if (range <= 0.01f) return;
 
-        // Ping-pong between min and max
-        float hue = Mathf.PingPong(Time.time * popHueSpeed, range) + popHueMin;
+        float energy = 0.3f; 
 
-        // Clamp to valid ColorAdjustments hue range [-180, 180]
+        if (trackReader != null && trackReader.CurrentAudioFeatures != null)
+        {
+            energy = Mathf.Clamp01(trackReader.CurrentAudioFeatures.energy);
+        }
+
+        float speed = Mathf.Lerp(minHueSpeed, maxHueSpeed, energy);
+
+        if (Time.time >= _nextFlipTime)
+        {
+            if (Random.value < 0.3f)
+                _popHueDirection *= -1f;
+
+            _nextFlipTime = Time.time + Random.Range(1f, 4f);
+        }
+
+        float hue = Mathf.PingPong(Time.time * speed * _popHueDirection, range) + popHueMin;
+
         hue = Mathf.Clamp(hue, -180f, 180f);
 
         _popColorAdjust.hueShift.value = hue;

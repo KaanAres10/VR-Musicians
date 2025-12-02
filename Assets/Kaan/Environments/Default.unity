@@ -8305,7 +8305,20 @@ MonoBehaviour:
   rapSkybox: {fileID: 2100000, guid: 5334f277fcb843944aebc29131d0b5a6, type: 2}
   countrySkybox: {fileID: 2100000, guid: f14e791cab3ea0c4397ab4827d05bebc, type: 2}
   defaultSkybox: {fileID: 2100000, guid: f14e791cab3ea0c4397ab4827d05bebc, type: 2}
-  playerTransform: {fileID: 1147934769}
+  globalVolume: {fileID: 0}
+  rockProfile: {fileID: 0}
+  popProfile: {fileID: 0}
+  classicProfile: {fileID: 0}
+  rapProfile: {fileID: 0}
+  countryProfile: {fileID: 0}
+  defaultProfile: {fileID: 0}
+  playerTransform: {fileID: 0}
+  enablePopDynamicHue: 1
+  trackReader: {fileID: 0}
+  minHueSpeed: 10
+  maxHueSpeed: 100
+  popHueMin: -60
+  popHueMax: 60
 --- !u!4 &1710711581
 Transform:
   m_ObjectHideFlags: 0

@@ -2842,7 +2842,9 @@ MonoBehaviour:
   defaultProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
   playerTransform: {fileID: 1607893903}
   enablePopDynamicHue: 1
-  popHueSpeed: 50
+  trackReader: {fileID: 546713975}
+  minHueSpeed: 10
+  maxHueSpeed: 100
   popHueMin: -180
   popHueMax: 180
 --- !u!4 &1710711581
