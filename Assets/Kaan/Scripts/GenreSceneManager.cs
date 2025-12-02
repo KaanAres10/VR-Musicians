@@ -52,6 +52,7 @@ public class GenreSceneManager : MonoBehaviour
     private MusicGenre _currentGenre = MusicGenre.Default;
     private ColorAdjustments _popColorAdjust;
 
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
