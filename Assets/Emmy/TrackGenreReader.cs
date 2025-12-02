@@ -3,7 +3,6 @@ using SpotifyAPI.Web;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Collections.Generic;
-using UnityEngine.Rendering;
 
 public class TrackGenreReader : MonoBehaviour
 {
@@ -39,22 +38,12 @@ public class TrackGenreReader : MonoBehaviour
         public float valence;
     }
 
-    [Header("Post-Processing")]
-    public Volume globalVolume;
-    public VolumeProfile rockProfile;
-    public VolumeProfile popProfile;
-    public VolumeProfile classicProfile;
-    public VolumeProfile rapProfile;
-    public VolumeProfile countryProfile;
-    public VolumeProfile defaultProfile;
-
     [Tooltip("How often to check Spotify for a new track (seconds).")]
     public float pollIntervalSeconds = 3f;
 
     private SpotifyClient _client;
     private string _lastTrackId = null;
     private bool _isRunning = true;
-
 
     // for reccobeats API
     private static readonly HttpClient _httpClient = new HttpClient
@@ -65,20 +54,18 @@ public class TrackGenreReader : MonoBehaviour
     private readonly Dictionary<string, ReccoAudioFeatures> _featuresCache =
         new Dictionary<string, ReccoAudioFeatures>();
 
-
-    // To get features for spawn enermies
+    // To get features for spawn enemies / gameplay
     public ReccoAudioFeatures CurrentAudioFeatures { get; private set; }
-    
-    
+
     private MusicGenre MapGenresToMusicGenre(IList<string> genres)
     {
         if (genres == null || genres.Count == 0)
             return MusicGenre.Default;
 
-        bool isRock    = false;
-        bool isPop     = false;
+        bool isRock = false;
+        bool isPop = false;
         bool isClassic = false;
-        bool isRap     = false;
+        bool isRap = false;
         bool isCountry = false;
 
         foreach (var g in genres)
@@ -88,104 +75,30 @@ public class TrackGenreReader : MonoBehaviour
 
             string gl = g.ToLowerInvariant();
 
-            if (gl.Contains("rock"))    isRock = true;
-            if (gl.Contains("pop"))     isPop = true;
+            if (gl.Contains("rock")) isRock = true;
+            if (gl.Contains("pop")) isPop = true;
             if (gl.Contains("classic")) isClassic = true;   // classical, classic rock etc.
             if (gl.Contains("rap") || gl.Contains("hip hop") || gl.Contains("hip-hop")) isRap = true;
             if (gl.Contains("country")) isCountry = true;
         }
 
-        if (isRock)    return MusicGenre.Rock;
-        if (isPop)     return MusicGenre.Pop;
+        if (isRock) return MusicGenre.Rock;
+        if (isPop) return MusicGenre.Pop;
         if (isClassic) return MusicGenre.Classic;
-        if (isRap)     return MusicGenre.Rap;
+        if (isRap) return MusicGenre.Rap;
         if (isCountry) return MusicGenre.Country;
 
         return MusicGenre.Default;
     }
 
-    private void ApplyPostProcessingForGenre(IList<string> genres)
-    {
-        if (globalVolume == null)
-        {
-            Debug.LogWarning("Global Volume is not assigned on TrackGenreReader.");
-            return;
-        }
-
-        VolumeProfile targetProfile = defaultProfile;
-
-        if (genres != null && genres.Count > 0)
-        {
-            bool isRock = false;
-            bool isPop  = false;
-            bool isClassic = false;
-            bool isRap = false;
-            bool isCountry = false;
-
-            foreach (var g in genres)
-            {
-                if (string.IsNullOrEmpty(g))
-                    continue;
-
-                string gl = g.ToLowerInvariant();
-                if (gl.Contains("rock")) isRock = true;
-                if (gl.Contains("pop"))  isPop  = true;
-                if (gl.Contains("classic")) isClassic = true;
-                if (gl.Contains("rap") || gl.Contains("hiphop") || gl.Contains("hip hop") || gl.Contains("hip-hop")) isRap = true;
-                if (gl.Contains("country")) isCountry = true;
-            }
-
-            if (isRock && rockProfile != null)
-            {
-                targetProfile = rockProfile;
-                Debug.Log("Applying Rock Profile");
-            }
-            else if (isPop && popProfile != null)
-            {
-                targetProfile = popProfile;
-                Debug.Log("Applying Pop Profile");
-            } else if (isClassic && classicProfile != null)
-            {
-                targetProfile = classicProfile;
-                Debug.Log("Applying Classic Profile");
-            } else if (isRap && rapProfile != null)
-            {
-                targetProfile = rapProfile;
-                Debug.Log("Applying Rap Profile");
-            } else if (isCountry && countryProfile != null)
-            {
-                targetProfile = countryProfile;
-                Debug.Log("Applying Country Profile");
-            }
-            else
-            {
-                Debug.Log("Applying Default Profile");
-            }
-        }
-        else
-        {
-            Debug.Log("Genre: NONE, Applying Default Profile");
-        }
-
-        if (targetProfile == null)
-        {
-            Debug.LogWarning("Target VolumeProfile is null, nothing to apply.");
-            return;
-        }
-
-        globalVolume.profile = targetProfile;
-    }
-
     private async void Start()
     {
-        // Don’t do anything if we’re not in Play mode
         if (!Application.isPlaying)
             return;
 
-        // Wait until SpotifyService is up & authenticated
         await WaitForSpotifyReady();
 
-        if (!_isRunning)  // object might have been destroyed while waiting
+        if (!_isRunning)
             return;
 
         var service = SpotifyService.Instance;
@@ -202,13 +115,11 @@ public class TrackGenreReader : MonoBehaviour
             return;
         }
 
-        // Start the monitoring loop
         await MonitorCurrentTrackLoop();
     }
 
     private void OnDestroy()
     {
-        // Stop the loop when this object is destroyed
         _isRunning = false;
     }
 
@@ -222,7 +133,6 @@ public class TrackGenreReader : MonoBehaviour
 
                 if (playback?.Item is FullTrack track)
                 {
-                    // New track started?
                     if (track.Id != _lastTrackId)
                     {
                         _lastTrackId = track.Id;
@@ -231,7 +141,6 @@ public class TrackGenreReader : MonoBehaviour
                 }
                 else
                 {
-                    // Nothing playing
                     if (_lastTrackId != null)
                     {
                         _lastTrackId = null;
@@ -244,7 +153,6 @@ public class TrackGenreReader : MonoBehaviour
                 Debug.LogError($"Error while checking current track: {e}");
             }
 
-            // Wait before next check (don’t spam the API)
             int ms = Mathf.Max(1000, Mathf.RoundToInt(pollIntervalSeconds * 1000f));
             await Task.Delay(ms);
         }
@@ -257,11 +165,9 @@ public class TrackGenreReader : MonoBehaviour
 
         try
         {
-            // GET /track?ids={spotifyId}
             string trackJson = await _httpClient.GetStringAsync($"track?ids={spotifyTrackId}");
             Debug.Log($"ReccoBeats /track?ids= response for {spotifyTrackId}: {trackJson}");
 
-            // Parse {"content":[...]}
             var searchResponse = JsonUtility.FromJson<ReccoTrackSearchResponse>(trackJson);
 
             if (searchResponse == null || searchResponse.content == null || searchResponse.content.Length == 0)
@@ -277,7 +183,6 @@ public class TrackGenreReader : MonoBehaviour
                 return null;
             }
 
-            // GET /track/{id}/audio-features
             string featJson = await _httpClient.GetStringAsync($"track/{reccoId}/audio-features");
             Debug.Log($"ReccoBeats /track/{{id}}/audio-features response for {reccoId}: {featJson}");
 
@@ -299,14 +204,12 @@ public class TrackGenreReader : MonoBehaviour
         }
     }
 
-
     private async Task OnTrackChanged(FullTrack track)
     {
         Debug.Log($"New track detected: {track.Name} - {track.Artists[0].Name}");
 
         try
         {
-            // get artist
             string artistId = track.Artists[0].Id;
             var artist = await _client.Artists.Get(artistId);
 
@@ -314,9 +217,7 @@ public class TrackGenreReader : MonoBehaviour
             {
                 Debug.Log($"Artist: {artist.Name}");
                 Debug.Log("Genres: " + string.Join(", ", artist.Genres));
-                
-                ApplyPostProcessingForGenre(artist.Genres);
-                
+
                 MusicGenre mg = MapGenresToMusicGenre(artist.Genres);
                 if (GenreSceneManager.Instance != null)
                 {
@@ -326,31 +227,23 @@ public class TrackGenreReader : MonoBehaviour
             else
             {
                 Debug.Log($"No genre data available for artist: {artist.Name}");
-                ApplyPostProcessingForGenre(null);
-                
                 if (GenreSceneManager.Instance != null)
                 {
                     GenreSceneManager.Instance.SetGenre(MusicGenre.Default);
                 }
             }
 
-            // audio features via ReccoBeats
             var features = await GetReccoBeatsFeaturesForSpotifyTrack(track.Id);
 
             if (features != null)
             {
                 CurrentAudioFeatures = features;
-            } else
+            }
+            else
             {
                 Debug.LogWarning("No ReccoBeats audio features returned for this track.");
                 return;
             }
-
-            //if (features == null)
-            //{
-            //    Debug.LogWarning("No ReccoBeats audio features returned for this track.");
-            //    return;
-            //}
 
             Debug.Log(
                 $"ReccoBeats features for {track.Name}:\n" +
@@ -361,12 +254,9 @@ public class TrackGenreReader : MonoBehaviour
                 $"  Loudness: {features.loudness}\n" +
                 $"  Key: {features.key}  Mode: {features.mode}"
             );
-
-            // TODO: send 'features' + 'artist.Genres' to gameplay / environment scripts here
         }
         catch (APIException apiEx)
         {
-            // Spotify returned an HTTP error
             Debug.LogError(
                 $"Spotify API error in OnTrackChanged: {apiEx.Message} " +
                 $"(HTTP {(int?)apiEx.Response?.StatusCode})\n" +
@@ -375,14 +265,12 @@ public class TrackGenreReader : MonoBehaviour
         }
         catch (System.Exception ex)
         {
-            // Any other unexpected error
             Debug.LogError($"Unexpected error in OnTrackChanged: {ex}");
         }
     }
 
     private async Task WaitForSpotifyReady()
     {
-        // Only poll while in Play mode AND while this object is alive
         while (Application.isPlaying && _isRunning)
         {
             var service = SpotifyService.Instance;
@@ -392,5 +280,4 @@ public class TrackGenreReader : MonoBehaviour
             await Task.Yield();
         }
     }
-
 }

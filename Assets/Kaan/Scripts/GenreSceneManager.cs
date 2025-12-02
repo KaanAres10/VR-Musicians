@@ -2,16 +2,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class GenreSceneManager : MonoBehaviour
 {
     public static GenreSceneManager Instance { get; private set; }
 
     [Header("Environment Scene Names")]
-    public string rockSceneName    = "Env_Rock";
-    public string popSceneName     = "Env_Pop";
+    public string rockSceneName = "Env_Rock";
+    public string popSceneName = "Env_Pop";
     public string classicSceneName = "Env_Classic";
-    public string rapSceneName     = "Env_Rap";
+    public string rapSceneName = "Env_Rap";
     public string countrySceneName = "Env_Country";
     public string defaultSceneName = "Env_Default";
 
@@ -23,11 +25,32 @@ public class GenreSceneManager : MonoBehaviour
     public Material countrySkybox;
     public Material defaultSkybox;
 
+    [Header("Post-Processing")]
+    public Volume globalVolume;
+    public VolumeProfile rockProfile;
+    public VolumeProfile popProfile;
+    public VolumeProfile classicProfile;
+    public VolumeProfile rapProfile;
+    public VolumeProfile countryProfile;
+    public VolumeProfile defaultProfile;
+
     [Header("Player")]
     public Transform playerTransform;
 
+    [Header("Dynamic Hue (Pop Only)")]
+    public bool enablePopDynamicHue = true;
+    [Tooltip("How fast hue shifts (degrees per second).")]
+    public float popHueSpeed = 50f;
+    [Tooltip("Minimum hue value (degrees).")]
+    public float popHueMin = -60f;
+    [Tooltip("Maximum hue value (degrees).")]
+    public float popHueMax = 60f;
+
     private string _currentEnvScene = "null";
     private bool _isSwitching = false;
+
+    private MusicGenre _currentGenre = MusicGenre.Default;
+    private ColorAdjustments _popColorAdjust;
 
     private void Awake()
     {
@@ -38,6 +61,25 @@ public class GenreSceneManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject); // keep across scene loads if needed
+    }
+
+    private void Update()
+    {
+        // Only animate when Pop is active and dynamic hue is enabled
+        if (!enablePopDynamicHue) return;
+        if (_currentGenre != MusicGenre.Pop) return;
+        if (_popColorAdjust == null) return;
+
+        float range = popHueMax - popHueMin;
+        if (range <= 0.01f) return;
+
+        // Ping-pong between min and max
+        float hue = Mathf.PingPong(Time.time * popHueSpeed, range) + popHueMin;
+
+        // Clamp to valid ColorAdjustments hue range [-180, 180]
+        hue = Mathf.Clamp(hue, -180f, 180f);
+
+        _popColorAdjust.hueShift.value = hue;
     }
 
     private void ApplySkybox(MusicGenre genre)
@@ -53,18 +95,86 @@ public class GenreSceneManager : MonoBehaviour
             case MusicGenre.Country: sky = countrySkybox; break;
         }
 
-        RenderSettings.skybox = sky;
+        if (sky != null)
+        {
+            RenderSettings.skybox = sky;
+            DynamicGI.UpdateEnvironment();
+        }
+        else
+        {
+            Debug.LogWarning($"GenreSceneManager: Skybox for {genre} is not assigned.");
+        }
+    }
 
-        // optional: force update ambient lighting
-        DynamicGI.UpdateEnvironment();
+    private void ApplyPostProcessing(MusicGenre genre)
+    {
+        if (globalVolume == null)
+        {
+            Debug.LogWarning("GenreSceneManager: Global Volume is not assigned.");
+            return;
+        }
+
+        VolumeProfile target = defaultProfile;
+
+        switch (genre)
+        {
+            case MusicGenre.Rock:
+                if (rockProfile != null) target = rockProfile;
+                break;
+            case MusicGenre.Pop:
+                if (popProfile != null) target = popProfile;
+                break;
+            case MusicGenre.Classic:
+                if (classicProfile != null) target = classicProfile;
+                break;
+            case MusicGenre.Rap:
+                if (rapProfile != null) target = rapProfile;
+                break;
+            case MusicGenre.Country:
+                if (countryProfile != null) target = countryProfile;
+                break;
+            case MusicGenre.Default:
+            default:
+                if (defaultProfile != null) target = defaultProfile;
+                break;
+        }
+
+        if (target == null)
+        {
+            Debug.LogWarning($"GenreSceneManager: Target VolumeProfile for {genre} is null.");
+            return;
+        }
+
+        globalVolume.profile = target;
+        Debug.Log($"[GenreSceneManager] Applied post-processing profile for {genre}");
+
+        // Pop Hue Dynamic
+        if (genre == MusicGenre.Pop && enablePopDynamicHue)
+        {
+            if (!globalVolume.profile.TryGet(out _popColorAdjust))
+            {
+                _popColorAdjust = null;
+                Debug.LogWarning("[GenreSceneManager] Pop profile has no ColorAdjustments override. " +
+                                 "Add one and enable Hue Shift.");
+            }
+        }
+        else
+        {
+            _popColorAdjust = null;
+        }
     }
 
     public void SetGenre(MusicGenre genre)
     {
         if (_isSwitching) return;
 
-        ApplySkybox(genre);
+        _currentGenre = genre;   
 
+        // Visuals
+        ApplySkybox(genre);
+        ApplyPostProcessing(genre);
+
+        // Environments (additive scenes)
         string targetScene = GetSceneNameForGenre(genre);
         if (string.IsNullOrEmpty(targetScene)) return;
         if (targetScene == _currentEnvScene) return;
@@ -76,10 +186,10 @@ public class GenreSceneManager : MonoBehaviour
     {
         switch (genre)
         {
-            case MusicGenre.Rock:    return rockSceneName;
-            case MusicGenre.Pop:     return popSceneName;
+            case MusicGenre.Rock: return rockSceneName;
+            case MusicGenre.Pop: return popSceneName;
             case MusicGenre.Classic: return classicSceneName;
-            case MusicGenre.Rap:     return rapSceneName;
+            case MusicGenre.Rap: return rapSceneName;
             case MusicGenre.Country: return countrySceneName;
             case MusicGenre.Default: return defaultSceneName;
         }
@@ -108,7 +218,6 @@ public class GenreSceneManager : MonoBehaviour
             yield return loadOp;
 
         AlignPlayerToRandomSpawn(newScene);
-
 
         _currentEnvScene = newScene;
         _isSwitching = false;
