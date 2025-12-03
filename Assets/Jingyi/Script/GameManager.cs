@@ -6,6 +6,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Settings")]
     public float gameDuration = 180f;  
+    
+    [Header("Score Multiplier")]
+    public float defaultScoreMultiplier = 1f;
+    public float randomSongsMultiplier = 2f;
+
+    private float currentScoreMultiplier;
 
     private float remainingTime;
 
@@ -21,6 +27,8 @@ public class GameManager : MonoBehaviour
         remainingTime = gameDuration;
         score = 0;
         isRunning = true;
+        
+        currentScoreMultiplier = defaultScoreMultiplier;
     }
 
     void Update()
@@ -41,7 +49,8 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        score += amount;
+        int finalAmount = Mathf.RoundToInt(amount * currentScoreMultiplier);
+        score += finalAmount;
         UIManager.Instance?.UpdateScore(score);
         Debug.Log("score: "+score);
     }
@@ -50,6 +59,12 @@ public class GameManager : MonoBehaviour
     {
         UIManager.Instance?.ShowEndPanel();
         Time.timeScale = 0f;
+    }
+    
+    public void SetRandomSongsActive(bool active)
+    {
+        currentScoreMultiplier = active ? randomSongsMultiplier : defaultScoreMultiplier;
+        Debug.Log($"[GameManager] Score multiplier set to {currentScoreMultiplier} (Random Songs active = {active})");
     }
 
     public bool IsRunning() => isRunning;
