@@ -51,6 +51,15 @@ public class Enemy : MonoBehaviour
             Debug.Log("hit enemy");
             Destroy(gameObject);
         }
+
+        if (other.CompareTag("Bullet"))
+        {
+
+            GameManager.Instance.AddScore(1);
+
+            Debug.Log("hit enemy");
+            Destroy(gameObject);
+        }
     }
 
 
