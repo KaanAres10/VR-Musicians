@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "XRI Default Input Actions",
     "maps": [
         {
@@ -2073,6 +2074,17 @@
             "bindings": [
                 {
                     "name": "",
+                    "id": "69580c32-8c9a-47d9-8b23-b53d760ca5da",
+                    "path": "<KHRSimpleController>{RightHand}/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "1ce80054-410d-4112-a332-50faa7fb4f23",
                     "path": "<XRController>{RightHand}/{GripButton}",
                     "interactions": "",
@@ -2119,17 +2131,6 @@
                     "name": "",
                     "id": "82f232f1-6246-4d1e-aacc-a7ccc16c76d9",
                     "path": "<HoloLensHand>{RightHand}/squeezePressed",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "69580c32-8c9a-47d9-8b23-b53d760ca5da",
-                    "path": "<KHRSimpleController>{RightHand}/select",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
