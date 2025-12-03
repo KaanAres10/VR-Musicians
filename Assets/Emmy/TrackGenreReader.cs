@@ -189,7 +189,6 @@ public class TrackGenreReader : MonoBehaviour
                     if (track.Id != _lastTrackId)
                     {
                         _lastTrackId = track.Id;
-                        playback.ShuffleState;
                         
                         string playlistName = await TryGetPlaylistName(playback);
                         
