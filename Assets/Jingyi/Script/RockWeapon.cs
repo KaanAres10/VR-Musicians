@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;   // XR input system
 
-public class PlayerShooting : MonoBehaviour
+public class RockWeapon : MonoBehaviour
 {
     [Header("Input (XR Trigger)")]
     public InputActionProperty triggerAction;   // Assign RightHand -> Interaction -> Activate

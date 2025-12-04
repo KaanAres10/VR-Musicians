@@ -1169,6 +1169,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1117346660
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 77.40136
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19.395
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 34.276527
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
+      propertyPath: m_Name
+      value: Violin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3bcdb823ae459e041aee7781edc3b173, type: 3}
 --- !u!1001 &1172420624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1326,7 +1383,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f35383bc9e18b4381af109e7608ac5d9, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7417,3 +7473,4 @@ SceneRoots:
   - {fileID: 1200394557}
   - {fileID: 977733638}
   - {fileID: 781409126}
+  - {fileID: 1117346660}

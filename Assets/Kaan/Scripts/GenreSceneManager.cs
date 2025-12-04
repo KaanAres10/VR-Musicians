@@ -33,6 +33,14 @@ public class GenreSceneManager : MonoBehaviour
     public VolumeProfile rapProfile;
     public VolumeProfile countryProfile;
     public VolumeProfile defaultProfile;
+    
+    [Header("Genre Weapons (Right Hand Children)")]
+    public GameObject rockWeapon;
+    public GameObject popWeapon;
+    public GameObject classicWeapon;
+    public GameObject rapWeapon;
+    public GameObject countryWeapon;
+    public GameObject defaultWeapon;
 
     [Header("Player")]
     public Transform playerTransform;
@@ -58,6 +66,9 @@ public class GenreSceneManager : MonoBehaviour
 
     private float _popHueDirection = 1f;
     private float _nextFlipTime = 0f;
+    
+    [Header("Pop Weapon / Spawner")]
+    public PopWeaponSpawner popWeaponSpawner;
 
 
     private void Awake()
@@ -70,6 +81,7 @@ public class GenreSceneManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject); // keep across scene loads if needed
     }
+    
 
     private void Update()
     {
@@ -125,6 +137,53 @@ public class GenreSceneManager : MonoBehaviour
         else
         {
             Debug.LogWarning($"GenreSceneManager: Skybox for {genre} is not assigned.");
+        }
+    }
+    
+    
+    private void ApplyWeaponForGenre(MusicGenre genre)
+    {
+        // Disable all first
+        if (rockWeapon)    rockWeapon.SetActive(false);
+        if (popWeapon)     popWeapon.SetActive(false);
+        if (classicWeapon) classicWeapon.SetActive(false);
+        if (rapWeapon)     rapWeapon.SetActive(false);
+        if (countryWeapon) countryWeapon.SetActive(false);
+        if (defaultWeapon) defaultWeapon.SetActive(false);
+
+        GameObject toEnable = null;
+
+        switch (genre)
+        {
+            case MusicGenre.Rock:
+                toEnable = rockWeapon;
+                break;
+            case MusicGenre.Pop:
+                toEnable = popWeapon;
+                break;
+            case MusicGenre.Classic:
+                toEnable = classicWeapon;
+                break;
+            case MusicGenre.Rap:
+                toEnable = rapWeapon;
+                break;
+            case MusicGenre.Country:
+                toEnable = countryWeapon;
+                break;
+            case MusicGenre.Default:
+            default:
+                toEnable = defaultWeapon;
+                break;
+        }
+
+        if (toEnable != null)
+        {
+            toEnable.SetActive(true);
+            Debug.Log($"GenreSceneManager: ToEnable {genre}");
+        }
+        else
+        {
+            Debug.LogWarning($"[GenreSceneManager] No weapon assigned for genre {genre}");
         }
     }
 
@@ -195,6 +254,9 @@ public class GenreSceneManager : MonoBehaviour
         // Visuals
         ApplySkybox(genre);
         ApplyPostProcessing(genre);
+        
+        ApplyWeaponForGenre(genre);
+
 
         // Environments (additive scenes)
         string targetScene = GetSceneNameForGenre(genre);
@@ -280,7 +342,13 @@ public class GenreSceneManager : MonoBehaviour
 
         playerTransform.position = pick.position;
         playerTransform.rotation = pick.rotation;
+        
 
         Debug.Log($"[GenreSceneManager] Spawned player at {pick.name} in {sceneName}");
+        
+        if (popWeaponSpawner != null && _currentGenre == MusicGenre.Pop)
+        {
+            popWeaponSpawner.RespawnAroundPlayer();
+        }
     }
 }
