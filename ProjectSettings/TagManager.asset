@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - PlayerBat
   - Bullet
+  - Floor
   layers:
   - Default
   - TransparentFX

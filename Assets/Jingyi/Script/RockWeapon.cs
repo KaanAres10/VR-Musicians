@@ -26,6 +26,7 @@ public class RockWeapon : MonoBehaviour
     [Header("VFX")]
     public GameObject muzzleFlashPrefab;
     public GameObject enemyHitVfxPrefab; 
+    
 
     private void Start()
     {
@@ -93,6 +94,7 @@ public class RockWeapon : MonoBehaviour
             Shoot(hitSomething, hitEnemy ? hit.collider : null, endPoint);
             nextFireTime = Time.time + fireRate;
         }
+        
     }
 
     private void Shoot(bool hitSomething, Collider hitCollider, Vector3 hitPoint)
@@ -112,30 +114,30 @@ public class RockWeapon : MonoBehaviour
                 Destroy(hitVfx, 2f);
                 GameManager.Instance.AddScore(1);
             }
-
-            // If you have health script, call that here instead of Destroy:
-            // hitCollider.GetComponent<EnemyHealth>()?.TakeDamage(1);
+            
             Destroy(hitCollider.gameObject);
         }
 
         // Sound
         if (gunAudio != null)
+        {
             gunAudio.Play();
+            Debug.Log("Audio playing");
+        }
+        else
+        {
+            Debug.Log("No audio source found");
+        }
+  
 
         // Muzzle VFX at the gun
         if (muzzleFlashPrefab != null)
         {
             GameObject vfx = Instantiate(muzzleFlashPrefab, laserPoint);
             vfx.transform.localPosition = Vector3.zero;
-            vfx.transform.localRotation = Quaternion.Euler(0f, 270f, 0f); // or Vector3.zero if prefab fixed
+            vfx.transform.localRotation = Quaternion.Euler(0f, 270f, 0f); 
             Destroy(vfx, 0.1f);
         }
-
-
-        // (Optional) impact VFX at hit point:
-        // if (hitSomething && impactVfxPrefab != null)
-        // {
-        //     Instantiate(impactVfxPrefab, hitPoint, Quaternion.identity);
-        // }
+        
     }
 }

@@ -26,6 +26,7 @@ public class CountryWeapon : MonoBehaviour
     [Header("VFX")]
     public GameObject muzzleFlashPrefab;
     public GameObject enemyHitVfxPrefab; 
+    
 
     private void Start()
     {

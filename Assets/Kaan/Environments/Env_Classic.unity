@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 913655994}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -7178,7 +7178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1943125625}
   - component: {fileID: 1943125626}
-  m_Layer: 1
+  m_Layer: 0
   m_Name: Post-Processing Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}

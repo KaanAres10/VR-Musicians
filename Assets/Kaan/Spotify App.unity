@@ -202,7 +202,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1281198923}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5090479
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -492,10 +492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6a6927ffc6a471d95287bcc3b82b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
-  globalVolume: {fileID: 1391328694}
-  rockProfile: {fileID: 11400000, guid: d8287028555913e43be9f7d5672b6d2c, type: 2}
-  popProfile: {fileID: 11400000, guid: cb6aab413adab2141bd2e51ccbeb2384, type: 2}
-  otherProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
   pollIntervalSeconds: 3
 --- !u!1 &108040099
 GameObject:
@@ -1227,10 +1223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6a6927ffc6a471d95287bcc3b82b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
-  globalVolume: {fileID: 1391328694}
-  rockProfile: {fileID: 11400000, guid: d8287028555913e43be9f7d5672b6d2c, type: 2}
-  popProfile: {fileID: 11400000, guid: cb6aab413adab2141bd2e51ccbeb2384, type: 2}
-  otherProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
   pollIntervalSeconds: 3
 --- !u!4 &360336893
 Transform:
@@ -1873,6 +1865,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654541726}
   m_CullTransparentMesh: 1
+--- !u!1 &671117075
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 671117077}
+  - component: {fileID: 671117076}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &671117076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671117075}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2b32f5532c298418d0c895e2ab617b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClearSpotifyPkce
+--- !u!4 &671117077
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671117075}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 42.42868, y: 24.43072, z: 13.52407}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &691815669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1921,6 +1957,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2008,6 +2045,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &738376086
 GameObject:
   m_ObjectHideFlags: 0
@@ -2163,6 +2229,8 @@ GameObject:
   - component: {fileID: 779872342}
   - component: {fileID: 779872344}
   - component: {fileID: 779872345}
+  - component: {fileID: 779872346}
+  - component: {fileID: 779872347}
   m_Layer: 0
   m_Name: Spotify Service
   m_TagString: Untagged
@@ -2182,7 +2250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f89aa3cd9589e984391abe1cde2d76ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AuthorizeUserOnStart: 0
+  AuthorizeUserOnStart: 1
   AuthType: 0
   _authMethodConfig: {fileID: 0}
 --- !u!4 &779872343
@@ -2212,7 +2280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075e842a5527e274595cba51e52001c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClientID: cb8736de2aa64d93ba5a82f366576894
+  ClientID: c0b8b9a73c3648dabc76cc612442d622
   APIScopes:
   - app-remote-control
   - playlist-modify-private
@@ -2252,7 +2320,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed6d5acd6a942df4287194d5c8817e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ImplicitGrant_AuthConfig
-  ClientID: cb8736de2aa64d93ba5a82f366576894
+  ClientID: c0b8b9a73c3648dabc76cc612442d622
   APIScopes:
   - app-remote-control
   - playlist-modify-private
@@ -2273,8 +2341,56 @@ MonoBehaviour:
   - user-read-private
   - user-read-recently-played
   - user-top-read
-  RedirectUri: https://localhost:5000/callback
+  RedirectUri: 'http://127.0.0.1:5000/callback '
   ServerPort: 5000
+--- !u!114 &779872346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779872341}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab508c58bcd5cb43ba899a334629a2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClientCredentials_AuthConfig
+  ClientID: c0b8b9a73c3648dabc76cc612442d622
+  APIScopes:
+  - app-remote-control
+  - playlist-modify-private
+  - playlist-modify-public
+  - playlist-read-collaborative
+  - playlist-read-private
+  - streaming
+  - ugc-image-upload
+  - user-follow-modify
+  - user-follow-read
+  - user-library-modify
+  - user-library-read
+  - user-modify-playback-state
+  - user-read-currently-playing
+  - user-read-email
+  - user-read-playback-position
+  - user-read-playback-state
+  - user-read-private
+  - user-read-recently-played
+  - user-top-read
+  RedirectUri: 'http://127.0.0.1:5001/callback '
+  ServerPort: 7777
+  ClientSecret: 4c3fb19197dd4850a5db2b78214c6677
+--- !u!114 &779872347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779872341}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ebccbd2a790bf045b6c6f3e86ff6156, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClientCredentials_Authorization
 --- !u!1 &780863827
 GameObject:
   m_ObjectHideFlags: 0
@@ -3099,8 +3215,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 654541728}
   m_HandleRect: {fileID: 654541727}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.99999994
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -8459,3 +8575,4 @@ SceneRoots:
   - {fileID: 89128776}
   - {fileID: 1391328695}
   - {fileID: 360336893}
+  - {fileID: 671117077}
