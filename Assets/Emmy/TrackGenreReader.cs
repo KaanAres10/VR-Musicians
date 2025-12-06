@@ -94,7 +94,16 @@ public class TrackGenreReader : MonoBehaviour
         "country", "alt-country", "country pop", "country rock", "bluegrass",
         "folk country", "americana", "modern country"
     };
+    
+    [Header("Auto Skip / Time Limit")]
+    [Tooltip("If true, limit how long a single track can play before we force a switch.")]
+    public bool enableAutoSkip = true;
 
+    [Tooltip("Max seconds a single track is allowed to play before we force next.")]
+    public float maxTrackPlaySeconds = 45f;  
+
+    private bool _autoSkipTriggeredForCurrentTrack = false;
+    private float _currentTrackPlaySeconds = 0f;
 
     private MusicGenre MapGenresToMusicGenre(IList<string> genres)
     {
@@ -186,13 +195,27 @@ public class TrackGenreReader : MonoBehaviour
 
                 if (playback?.Item is FullTrack track)
                 {
+                    await EnsureShuffleEnabled(playback);
+
                     if (track.Id != _lastTrackId)
                     {
                         _lastTrackId = track.Id;
+                        _currentTrackPlaySeconds = 0f;
+                        _autoSkipTriggeredForCurrentTrack = false;
+
                         
                         string playlistName = await TryGetPlaylistName(playback);
                         
                         await OnTrackChanged(track, playlistName);
+                    }
+                    else
+                    {
+                        if (playback.IsPlaying)
+                        {
+                            _currentTrackPlaySeconds += pollIntervalSeconds;
+                        }
+
+                        await CheckAutoSkipTrack();
                     }
                 }
                 else
@@ -200,6 +223,8 @@ public class TrackGenreReader : MonoBehaviour
                     if (_lastTrackId != null)
                     {
                         _lastTrackId = null;
+                        _currentTrackPlaySeconds = 0f;
+                        _autoSkipTriggeredForCurrentTrack = false;
                         Debug.Log("No track is currently playing.");
                     }
                 }
@@ -230,6 +255,66 @@ public class TrackGenreReader : MonoBehaviour
 
             int ms = Mathf.Max(1000, Mathf.RoundToInt(pollIntervalSeconds * 1000f));
             await Task.Delay(ms);
+        }
+    }
+    
+    private async Task CheckAutoSkipTrack()
+    {
+        if (!enableAutoSkip) return;
+        if (_autoSkipTriggeredForCurrentTrack) return;
+
+        float remaining = maxTrackPlaySeconds - _currentTrackPlaySeconds;
+
+        if (remaining <= 0f)
+        {
+            await DoAutoSkipNow();
+            return;
+        }
+    }
+    
+    private async Task DoAutoSkipNow()
+    {
+        if (_autoSkipTriggeredForCurrentTrack) return;
+
+        _autoSkipTriggeredForCurrentTrack = true;
+        Debug.Log("[TrackGenreReader] Performing auto-skip now…");
+
+        try
+        {
+            await _client.Player.SkipNext(); 
+        }
+        catch (APIException apiEx)
+        {
+            Debug.LogError($"[TrackGenreReader] Auto-skip API error: {apiEx}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[TrackGenreReader] Auto-skip unexpected error: {ex}");
+        }
+    }
+    
+    private async Task EnsureShuffleEnabled(CurrentlyPlayingContext playback)
+    {
+        try
+        {
+            bool shuffleOn = playback.ShuffleState;
+
+            if (!shuffleOn)
+            {
+                Debug.Log("[TrackGenreReader] Shuffle is OFF, enabling shuffle…");
+                
+                await _client.Player.SetShuffle(new PlayerShuffleRequest(true));
+
+                Debug.Log("[TrackGenreReader] Shuffle enabled on current device.");
+            }
+        }
+        catch (APIException apiEx)
+        {
+            Debug.LogError($"[TrackGenreReader] Failed to enable shuffle: {apiEx}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[TrackGenreReader] Unexpected error enabling shuffle: {ex}");
         }
     }
 
@@ -281,6 +366,9 @@ public class TrackGenreReader : MonoBehaviour
 
     private async Task OnTrackChanged(FullTrack track, string playlistName)
     {
+        _autoSkipTriggeredForCurrentTrack = false;  
+        _currentTrackPlaySeconds = 0f;
+        
         Debug.Log($"New track detected: {track.Name} - {track.Artists[0].Name}");
         
         CurrentPlaylistName = playlistName;
@@ -539,6 +627,9 @@ public class TrackGenreReader : MonoBehaviour
     ("calvin harris", MusicGenre.Pop),
     ("will.i.am", MusicGenre.Pop),
     ("jennifer lopez", MusicGenre.Pop),
+    ("pitbull", MusicGenre.Pop),
+    ("lmfao", MusicGenre.Pop),
+    
 
     // ROCK
     ("metallica", MusicGenre.Rock),
