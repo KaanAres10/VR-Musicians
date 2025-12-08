@@ -148,14 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6a6927ffc6a471d95287bcc3b82b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
-  globalVolume: {fileID: 1906302295}
-  rockProfile: {fileID: 11400000, guid: d8287028555913e43be9f7d5672b6d2c, type: 2}
-  popProfile: {fileID: 11400000, guid: cb6aab413adab2141bd2e51ccbeb2384, type: 2}
-  classicProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
-  rapProfile: {fileID: 11400000, guid: 0808ad2821ec1db41937560278b94f6c, type: 2}
-  countryProfile: {fileID: 11400000, guid: f664bf2deefcfd545a286e3018cd7472, type: 2}
-  defaultProfile: {fileID: 11400000, guid: 9edac54c7ab31a745805939bf01cc864, type: 2}
   pollIntervalSeconds: 3
+  enableAutoSkip: 1
+  maxTrackPlaySeconds: 45
 --- !u!4 &1377187
 Transform:
   m_ObjectHideFlags: 0
@@ -401,6 +396,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   gameDuration: 180
+  defaultScoreMultiplier: 1
+  randomSongsMultiplier: 2
+  score: 0
 --- !u!4 &262259618
 Transform:
   m_ObjectHideFlags: 0
@@ -1023,6 +1021,7 @@ MonoBehaviour:
   scoreText: {fileID: 1725421806}
   timerText: {fileID: 827525555}
   endPanel: {fileID: 225299494}
+  finalScoreText: {fileID: 0}
 --- !u!4 &924165431
 Transform:
   m_ObjectHideFlags: 0
@@ -1767,6 +1766,71 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4059727098512524489
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1040907953928173376, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1040907953928173376, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4188160055159445241, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_Name
+      value: PopWeapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -64.20245
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.977645
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -298.5913
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6842986796490768551, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b11a8ab0536b1d242ae1c2153fc56963, type: 3}
 --- !u!1001 &7831919990621561943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1844,3 +1908,4 @@ SceneRoots:
   - {fileID: 1065847301}
   - {fileID: 1906302296}
   - {fileID: 1377187}
+  - {fileID: 4059727098512524489}

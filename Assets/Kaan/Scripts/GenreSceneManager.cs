@@ -69,7 +69,10 @@ public class GenreSceneManager : MonoBehaviour
     
     [Header("Pop Weapon / Spawner")]
     public PopWeaponSpawner popWeaponSpawner;
-
+    
+    
+    [Header("Ground / Gravity")]
+    public PlayerOnGround playerOnGround;   // <-- ADD THIS
 
     private void Awake()
     {
@@ -80,6 +83,21 @@ public class GenreSceneManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject); // keep across scene loads if needed
+    }
+    
+    private void ApplyGroundForGenre(MusicGenre genre)
+    {
+        if (playerOnGround == null) return;
+
+        // Disable PlayerOnGround for Rock, Pop, Rap
+        bool disableGround =
+            genre == MusicGenre.Rock ||
+            genre == MusicGenre.Pop  ||
+            genre == MusicGenre.Rap;
+
+        playerOnGround.enabled = !disableGround;
+
+        Debug.Log($"[GenreSceneManager] PlayerOnGround.enabled = {!disableGround} for genre {genre}");
     }
     
 
@@ -256,6 +274,8 @@ public class GenreSceneManager : MonoBehaviour
         ApplyPostProcessing(genre);
         
         ApplyWeaponForGenre(genre);
+        
+        ApplyGroundForGenre(genre);
 
 
         // Environments (additive scenes)

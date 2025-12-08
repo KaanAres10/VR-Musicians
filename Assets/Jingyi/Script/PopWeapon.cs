@@ -1,43 +1,42 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit.Interactables; // XRGrabInteractable (depending on XRITK version)
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(Rigidbody), typeof(XRGrabInteractable))]
 public class PopWeapon : MonoBehaviour
 {
     [Header("Shoot Force Settings")]
-    [Tooltip("Force when timing value is at minimum (0).")]
     public float minShootForce = 6f;
-
-    [Tooltip("Force when timing value is at maximum (3).")]
     public float maxShootForce = 20f;
-
-    [Tooltip("Curve to shape how force grows from 0→1. X = normalized time (0–1), Y = normalized force (0–1).")]
     public AnimationCurve forceCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
     [Header("Timing Bar Settings")]
-    [Tooltip("Time (seconds) for a full 0→3→0 ping-pong cycle.")]
     public float barCycleDuration = 1.5f;
 
     [Header("Color Gradient")]
-    [Tooltip("Gradient evaluated from 0–1 (mapped from 0–3 timing).")]
     public Gradient barGradient;
 
     [Header("UI References")]
-    [Tooltip("Slider that shows the timing bar (World Space Canvas).")]
     public Slider timingBar;
-
-    [Tooltip("Fill Image of the bar to color it (e.g. the Slider's Fill image).")]
     public Image barFillImage;
+
+    [Header("Lifetime After Release")]
+    public float destroyAfterReleaseTime = 5f;
+
+    [Header("Rotation")]
+    public float rotateSpeed = 180f;
+    public Transform visualToRotate;
 
     private XRGrabInteractable grabInteractable;
     private Rigidbody rb;
 
     private bool isGrabbed = false;
-    // Now represents the raw timing in [0, 3].
+    private bool isReleased = false;
+    private float releaseTimer = 0f;
+
     private float currentValue = 0f;
-    private float cycleTimer = 0f;     // internal time for PingPong
+    private float cycleTimer = 0f;
 
     private void Awake()
     {
@@ -47,7 +46,9 @@ public class PopWeapon : MonoBehaviour
         grabInteractable.selectEntered.AddListener(OnGrab);
         grabInteractable.selectExited.AddListener(OnRelease);
 
-        // Init UI if present
+        if (visualToRotate == null)
+            visualToRotate = transform;
+
         if (timingBar != null)
         {
             timingBar.minValue = 0f;
@@ -69,21 +70,39 @@ public class PopWeapon : MonoBehaviour
 
     private void Update()
     {
+        // -------------------------
+        // DESTROY AFTER RELEASE
+        // -------------------------
+        if (isReleased)
+        {
+            releaseTimer += Time.deltaTime;
+            if (releaseTimer >= destroyAfterReleaseTime)
+            {
+                Debug.Log("[PopWeapon] Destroyed after release timer.");
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        // -------------------------
+        // ONLY UPDATE LOGIC IF GRABBED
+        // -------------------------
         if (!isGrabbed)
             return;
 
+        // Rotate while held
+        if (visualToRotate != null)
+            visualToRotate.Rotate(Vector3.up * rotateSpeed * Time.deltaTime, Space.Self);
+
+        // Ping-pong fill meter
         if (barCycleDuration > 0.0001f)
         {
-            
             cycleTimer += Time.deltaTime * (6f / barCycleDuration);
-
-            // 0→3→0 repeatedly
-            float t = Mathf.PingPong(cycleTimer, 3f);
-            currentValue = t; // store 0–3
+            currentValue = Mathf.PingPong(cycleTimer, 3f);
         }
         else
         {
-            currentValue = 1.5f; // middle of 0–3
+            currentValue = 1.5f;
         }
 
         UpdateBarVisual();
@@ -92,56 +111,47 @@ public class PopWeapon : MonoBehaviour
     private void OnGrab(SelectEnterEventArgs args)
     {
         isGrabbed = true;
+        isReleased = false;
+        releaseTimer = 0f;
 
-        // Reset timer each grab
         cycleTimer = 0f;
         currentValue = 0f;
-        UpdateBarVisual();
 
-        // Disable physics while held
         rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        UpdateBarVisual();
     }
 
     private void OnRelease(SelectExitEventArgs args)
     {
         isGrabbed = false;
+        isReleased = true;     // Start destroy countdown
+        releaseTimer = 0f;
 
-        // Normalize timing 0–3 → 0–1
+        // Compute throw force
         float normalizedTime = Mathf.InverseLerp(0f, 3f, currentValue);
-
-        // Evaluate curve (shape) then remap to force range
-        float curveT = forceCurve.Evaluate(normalizedTime);          // 0–1
+        float curveT = forceCurve.Evaluate(normalizedTime);
         float chosenForce = Mathf.Lerp(minShootForce, maxShootForce, curveT);
 
-        Debug.Log($"[PopWeapon] Release: raw={currentValue:F2}, norm={normalizedTime:F2}, curve={curveT:F2}, force={chosenForce:F2}");
-
-        // Re-enable physics
         rb.isKinematic = false;
 
-        // Shoot in the released hand's forward direction
         Transform hand = args.interactorObject.transform;
-        rb.linearVelocity = hand.forward * chosenForce;
-    }
+        rb.velocity = hand.forward * chosenForce;
 
+        Debug.Log($"[PopWeapon] Released with force {chosenForce}, will destroy in {destroyAfterReleaseTime}s");
+    }
 
     private void UpdateBarVisual()
     {
-        // Slider value (0–3)
         if (timingBar != null)
             timingBar.value = currentValue;
 
-        if (barFillImage == null)
-            return;
-
-        // Normalize to 0–1 for gradient
-        float normalizedTime = Mathf.InverseLerp(0f, 3f, currentValue);
-
-        if (barGradient != null)
+        if (barFillImage != null)
         {
-            Color c = barGradient.Evaluate(normalizedTime);
-            barFillImage.color = c;
+            float normalizedTime = Mathf.InverseLerp(0f, 3f, currentValue);
+            barFillImage.color = barGradient.Evaluate(normalizedTime);
         }
     }
 
@@ -150,7 +160,7 @@ public class PopWeapon : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             GameManager.Instance.AddScore(1);
-            Debug.Log("hit enemy");
+            Debug.Log("Hit enemy");
             Destroy(other.gameObject);
         }
     }
