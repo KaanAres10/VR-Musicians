@@ -25,7 +25,10 @@ public class CountryWeapon : MonoBehaviour
 
     [Header("VFX")]
     public GameObject muzzleFlashPrefab;
-    public GameObject enemyHitVfxPrefab; 
+ 
+    [Header("Enemy Hit VFX (Random Pick)")]
+    public GameObject[] enemyHitVfxPrefabs;  
+
     
 
     private void Start()
@@ -109,20 +112,24 @@ public class CountryWeapon : MonoBehaviour
         // Damage enemy ONLY if ray is on an enemy when you fire
         if (hitEnemy)
         {
-            // Spawn hit VFX on enemy
-            if (enemyHitVfxPrefab != null)
+            // Pick random VFX from array
+            if (enemyHitVfxPrefabs != null && enemyHitVfxPrefabs.Length > 0)
             {
-                // Align with surface normal so sparks fly out correctly
-                Quaternion rot = Quaternion.LookRotation(hitPoint - laserPoint.position);
-                GameObject hitVfx = Instantiate(enemyHitVfxPrefab, hitPoint, rot);
-                Destroy(hitVfx, 2f);
-                GameManager.Instance.AddScore(1);
+                int index = Random.Range(0, enemyHitVfxPrefabs.Length);
+                GameObject chosenVfx = enemyHitVfxPrefabs[index];
+
+                if (chosenVfx != null)
+                {
+                    Quaternion rot = Quaternion.LookRotation(hitPoint - laserPoint.position);
+                    GameObject vfx = Instantiate(chosenVfx, hitPoint, rot);
+                    Destroy(vfx, 2f);
+                }
             }
 
-            // If you have health script, call that here instead of Destroy:
-            // hitCollider.GetComponent<EnemyHealth>()?.TakeDamage(1);
+            GameManager.Instance.AddScore(1);
             Destroy(hitCollider.gameObject);
         }
+
 
         // Sound
         if (gunAudio != null)

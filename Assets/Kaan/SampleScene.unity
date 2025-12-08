@@ -10378,6 +10378,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 583340563854170035, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 585480472500942354, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
@@ -10466,6 +10470,14 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3752030747713321391, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_LeftHandTurnInput.m_InputActionReference
+      value: 
+      objectReference: {fileID: -7374733323251553461, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 3752030747713321391, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+      propertyPath: m_RightHandTurnInput.m_InputActionReference
+      value: 
+      objectReference: {fileID: -8525429354371678379, guid: c348712bda248c246b8c49b3db54643f, type: 3}
     - target: {fileID: 4750419573833148750, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -11347,14 +11359,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6a6927ffc6a471d95287bcc3b82b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrackGenreReader
-  globalVolume: {fileID: 2105468980}
-  rockProfile: {fileID: 11400000, guid: d8287028555913e43be9f7d5672b6d2c, type: 2}
-  popProfile: {fileID: 11400000, guid: cb6aab413adab2141bd2e51ccbeb2384, type: 2}
-  classicProfile: {fileID: 11400000, guid: 1688595cb0c699e4d92c60cbf097cbea, type: 2}
-  rapProfile: {fileID: 11400000, guid: 0808ad2821ec1db41937560278b94f6c, type: 2}
-  countryProfile: {fileID: 11400000, guid: f664bf2deefcfd545a286e3018cd7472, type: 2}
-  defaultProfile: {fileID: 11400000, guid: 9edac54c7ab31a745805939bf01cc864, type: 2}
   pollIntervalSeconds: 3
+  enableAutoSkip: 1
+  maxTrackPlaySeconds: 45
 --- !u!4 &1503884216
 Transform:
   m_ObjectHideFlags: 0
