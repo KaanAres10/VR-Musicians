@@ -4,32 +4,43 @@ using static TrackGenreReader;
 public class EnemySpawner : MonoBehaviour
 {
     public Transform player;
+    
     public GameObject enemyPrefab;
 
     public TrackGenreReader trackReader;
     private float energy;
 
-
-    public float spawnRadius = 10f;
+    [Header("Spawn Settings")]
+    public Transform[] spawnPoints;            // ← Set these in Inspector
+    public float spawnRadius = 2f;             // small random offset around each spawn point
     public float spawnInterval = 1.5f;
 
     float timer = 0f;
 
-
     public float minInterval = 3f;
     public float maxInterval = 5f;
 
-
+    public float minSpawnDistanceBetweenEnemies = 2f;
+    
+    
     void Update()
     {
+        // Automatically find all objects tagged "EnemySpawn"
+        GameObject[] points = GameObject.FindGameObjectsWithTag("EnemySpawn");
+
+        spawnPoints = new Transform[points.Length];
+        for (int i = 0; i < points.Length; i++)
+        {
+            spawnPoints[i] = points[i].transform;
+        }
+        
         if (trackReader.CurrentAudioFeatures != null)
         {
             energy = trackReader.CurrentAudioFeatures.energy;
         }
 
-
-
-        spawnInterval = Mathf.Lerp(maxInterval, minInterval, energy); // higher energy - spawn enermy faster and increase moving speed, and more enermies
+        // higher energy -> smaller interval -> more frequent spawns
+        spawnInterval = Mathf.Lerp(maxInterval, minInterval, energy);
 
         timer += Time.deltaTime;
 
@@ -40,7 +51,6 @@ public class EnemySpawner : MonoBehaviour
         }
 
         UpdateAllEnemiesSpeed();
-
     }
 
     int GetSpawnCount(float energy)
@@ -51,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
         }
         else
         {
-            return Mathf.CeilToInt(2+ 5 * energy);
+            return Mathf.CeilToInt(2 + 5 * energy);
         }
     }
 
@@ -59,32 +69,81 @@ public class EnemySpawner : MonoBehaviour
     {
         if (energy < 0.7f)
         {
-            return 1f + 1f * energy;      // 3 ~ 6.5
+            return 1f + 1f * energy;
         }
         else
         {
-            return 1.5f + 1.5f * energy;      // 8.5 ~ 10
+            return 1.5f + 1.5f * energy;
         }
     }
 
-
     void SpawnEnemy()
     {
+        if (spawnPoints == null || spawnPoints.Length == 0)
+        {
+            Debug.LogWarning("EnemySpawner: No spawnPoints assigned!");
+            return;
+        }
+
         int count = GetSpawnCount(energy);
+
+        // Store positions chosen this batch so we don’t place enemies on top of each other
+        System.Collections.Generic.List<Vector3> usedPositions = new System.Collections.Generic.List<Vector3>();
 
         for (int i = 0; i < count; i++)
         {
-            Vector2 randomDir = Random.insideUnitCircle.normalized;
-            Vector3 spawnPos = player.position + new Vector3(randomDir.x, randomDir.y, 0) * spawnRadius;
+            Vector3 spawnPos = Vector3.zero;
+            bool foundSpot = false;
+
+            for (int attempts = 0; attempts < 10; attempts++)
+            {
+                // 1) Pick a random spawn point
+                Transform sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
+
+                // 2) Optional small random offset around that spawn point
+                Vector2 offset2D = Random.insideUnitCircle * spawnRadius;
+                Vector3 candidate = sp.position + new Vector3(offset2D.x, 0f, offset2D.y);
+
+                // Use spawn point's height (so enemy is on ground)
+                candidate.y = sp.position.y;
+
+                // 3) Check distance to other enemies spawned in this batch
+                bool tooClose = false;
+                foreach (var pos in usedPositions)
+                {
+                    if (Vector3.Distance(pos, candidate) < minSpawnDistanceBetweenEnemies)
+                    {
+                        tooClose = true;
+                        break;
+                    }
+                }
+
+                if (!tooClose)
+                {
+                    spawnPos = candidate;
+                    foundSpot = true;
+                    break;
+                }
+            }
+
+            if (!foundSpot)
+            {
+                // couldn't find non-overlapping spot after several attempts, skip this enemy
+                continue;
+            }
+
+            usedPositions.Add(spawnPos);
 
             GameObject obj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
             float speed = GetEnemySpeed(energy);
-            obj.GetComponent<Enemy>().SetSpeed(speed);
-
+            Enemy enemyComp = obj.GetComponent<Enemy>();
+            if (enemyComp != null)
+            {
+                enemyComp.SetSpeed(speed);
+            }
         }
     }
-
 
     void UpdateAllEnemiesSpeed()
     {
@@ -96,12 +155,8 @@ public class EnemySpawner : MonoBehaviour
             Enemy e = obj.GetComponent<Enemy>();
             if (e != null)
             {
-                //e.SetSpeed(speed);
-                e.speed = Mathf.Lerp(e.speed, targetSpeed, Time.deltaTime * 3f); // change moving speed smoothly
+                e.speed = Mathf.Lerp(e.speed, targetSpeed, Time.deltaTime * 3f); // smooth change
             }
         }
     }
-
-
-
 }
