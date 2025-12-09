@@ -13,6 +13,10 @@ public class MonsterDissolve : MonoBehaviour
     private bool _isDissolving = false;
     private float _t = 0f;
 
+    [Header("Flash Effect When Hit")]
+    public GameObject flashPrefab;
+    public Transform flashPoint; 
+
     void Awake()
     {
         var renderers = GetComponentsInChildren<Renderer>();
@@ -32,6 +36,16 @@ public class MonsterDissolve : MonoBehaviour
         }
     }
 
+    void TriggerFlash()
+    {
+        if (flashPrefab == null) return;
+
+        Vector3 pos = (flashPoint != null) ? flashPoint.position : transform.position;
+        Quaternion rot = Quaternion.identity;
+
+        Instantiate(flashPrefab, pos, rot);
+    }
+
     void Start()
     {
         // AUTO-TEST: Start dissolve after 0.5 seconds
@@ -46,6 +60,8 @@ public class MonsterDissolve : MonoBehaviour
 
         _isDissolving = true;
         _t = 0f;
+
+        TriggerFlash();
     }
 
     void Update()
@@ -66,4 +82,5 @@ public class MonsterDissolve : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
 }
