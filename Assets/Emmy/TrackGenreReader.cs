@@ -105,6 +105,13 @@ public class TrackGenreReader : MonoBehaviour
     private bool _autoSkipTriggeredForCurrentTrack = false;
     private float _currentTrackPlaySeconds = 0f;
 
+    private MusicGenre finalGenre = MusicGenre.Default;
+
+    public MusicGenre getCurrentGenre()
+    {
+        return finalGenre;
+    }
+
     private MusicGenre MapGenresToMusicGenre(IList<string> genres)
     {
         if (genres == null || genres.Count == 0)
@@ -394,7 +401,7 @@ public class TrackGenreReader : MonoBehaviour
             string artistId = track.Artists[0].Id;
             var artist = await _client.Artists.Get(artistId);
 
-            MusicGenre finalGenre = MusicGenre.Default;
+            finalGenre = MusicGenre.Default;
             string spotifyGenresDebug = "(none)";
 
             if (artist.Genres != null && artist.Genres.Count > 0)
@@ -454,6 +461,7 @@ public class TrackGenreReader : MonoBehaviour
             if (GenreSceneManager.Instance != null)
             {
                 Debug.Log($"[TrackGenreReader] Applying final genre to scene: {finalGenre}");
+                
                 GenreSceneManager.Instance.SetGenre(finalGenre);
             }
             else
@@ -629,6 +637,8 @@ public class TrackGenreReader : MonoBehaviour
     ("jennifer lopez", MusicGenre.Pop),
     ("pitbull", MusicGenre.Pop),
     ("lmfao", MusicGenre.Pop),
+    ("jessie j", MusicGenre.Pop),
+    ("sia", MusicGenre.Pop),
     
 
     // ROCK
@@ -671,6 +681,7 @@ public class TrackGenreReader : MonoBehaviour
     ("keith urban", MusicGenre.Country),
     ("dolly parton", MusicGenre.Country),
     ("shania twain", MusicGenre.Country),
+    ("rednex", MusicGenre.Country),
 
     // CLASSIC / SOUNDTRACK
     ("hans zimmer", MusicGenre.Classic),

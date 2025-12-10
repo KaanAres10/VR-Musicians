@@ -138,7 +138,7 @@ public class PopWeapon : MonoBehaviour
         rb.isKinematic = false;
 
         Transform hand = args.interactorObject.transform;
-        rb.velocity = hand.forward * chosenForce;
+        rb.linearVelocity = hand.forward * chosenForce;
 
         Debug.Log($"[PopWeapon] Released with force {chosenForce}, will destroy in {destroyAfterReleaseTime}s");
     }

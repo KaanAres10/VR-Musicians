@@ -10,6 +10,7 @@ TagManager:
   - Bullet
   - Floor
   - EnemySpawn
+  - PopWeapon
   layers:
   - Default
   - TransparentFX

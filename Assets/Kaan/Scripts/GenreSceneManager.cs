@@ -266,6 +266,12 @@ public class GenreSceneManager : MonoBehaviour
     public void SetGenre(MusicGenre genre)
     {
         if (_isSwitching) return;
+        
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.HideTip();
+        }
+
 
         _currentGenre = genre;   
 

@@ -9,7 +9,16 @@ public class Player : MonoBehaviour
     public float energy = 0f;
 
     public HealthBar healthBar;
+    
+    private bool isHealthLow = false;
+    
+    public float lowHealthThreshold = 50f;
+    public float maxHealthThreshold = 90f;
 
+    
+
+    
+    
     void Start()
     {
         currentHealth = maxHealth;
@@ -25,9 +34,10 @@ public class Player : MonoBehaviour
         }
 
         AutoRegenHealth();
+        CheckHealthState();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
@@ -38,10 +48,16 @@ public class Player : MonoBehaviour
         {
             Die();
         }
+
     }
 
     void AutoRegenHealth()
     {
+        MusicGenre currentGenre = trackReader.getCurrentGenre();
+        if (currentGenre == MusicGenre.Rock || currentGenre == MusicGenre.Pop || currentGenre == MusicGenre.Rap)
+        {
+            return;
+        }
         if (currentHealth >= maxHealth)
             return;
 
@@ -60,13 +76,13 @@ public class Player : MonoBehaviour
         {
             if (energy < 0.1f)
             {
-                return  1.0f / (2 * energy);
+                return  1.0f / (5 * energy);
             }
-            return 1.0f / energy;      
+            return 1.0f / (2 * energy);
         }
         else
         {
-            return 1.0f / energy;  
+            return  1.0f / (2 * energy);
         }
     }
 
@@ -82,5 +98,21 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Player Died");
         GameManager.Instance?.EndGame();
+    }
+    
+    void CheckHealthState()
+    {
+        // Enter low health
+        if (!isHealthLow && currentHealth <= lowHealthThreshold)
+        {
+            isHealthLow = true;
+            UIManager.Instance.ShowLowHealthTip();
+        }
+        // Exit low health
+        else if (isHealthLow && currentHealth >= maxHealthThreshold)
+        {
+            isHealthLow = false;
+            UIManager.Instance.ShowRecoveredTip();
+        }
     }
 }
