@@ -112,8 +112,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.3397348, z: 1}
-  m_Center: {x: 0, y: 0.39225355, z: 0}
+  m_Size: {x: 1, y: 2.3702354, z: 1}
+  m_Center: {x: 0, y: 0.90750384, z: 0}
 --- !u!114 &7243903289947481792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   speed: 3
-  jumpTriggerDistance: 3
+  jumpTriggerDistance: 6
   idleTriggerDistance: 1.2
   deathDelay: 1
   rotationSpeed: 5
@@ -135,6 +135,12 @@ MonoBehaviour:
   damageInterval: 0.3
   damageAmount: 3
   trackReader: {fileID: 0}
+  batTag: PlayerBat
+  rightHandHaptics: {fileID: 0}
+  hapticAmplitude: 0.7
+  hapticDuration: 0.5
+  knockbackForce: 25
+  upForce: 3
 --- !u!54 &7101981803810844246
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -349,7 +355,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 5e1f8202d1953c44fa764066551e9479, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 03a074e3600dda14ebe656d9f5bdb43e, type: 2}
+      objectReference: {fileID: 9100000, guid: 09450045a6acca644bdf8d62bd0c9171, type: 2}
     - target: {fileID: 6057286732890248245, guid: 5e1f8202d1953c44fa764066551e9479, type: 3}
       propertyPath: m_Layer
       value: 7

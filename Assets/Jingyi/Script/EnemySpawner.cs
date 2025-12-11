@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static TrackGenreReader;
+using UnityEngine.SceneManagement;
+
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -39,14 +41,45 @@ public class EnemySpawner : MonoBehaviour
     Dictionary<MusicGenre, float> speedMultipliers = new Dictionary<MusicGenre, float>()
     {
         { MusicGenre.Rock, 2f },
-        { MusicGenre.Pop, 1.3f },
-        { MusicGenre.Rap, 1.5f },
-        { MusicGenre.Classic, 0.9f },
-        { MusicGenre.Country, 1.1f },
+        { MusicGenre.Pop, 1.8f },
+        { MusicGenre.Rap, 1.8f },
+        { MusicGenre.Classic, 1.5f },
+        { MusicGenre.Country, 1.5f },
         { MusicGenre.Default, 1.0f }
     };
 
+    [Header("Enemy Prefabs per Genre")]
+    public GameObject defaultEnemyPrefab;   // fallback
+    public GameObject rockEnemyPrefab;
+    public GameObject popEnemyPrefab;
+    public GameObject rapEnemyPrefab;
+    public GameObject classicEnemyPrefab;
+    public GameObject countryEnemyPrefab;
+
     
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ClearAllEnemies();
+    }
+
+    private void ClearAllEnemies()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var obj in enemies)
+        {
+            Destroy(obj);
+        }
+    }
     
     void Update()
     {
@@ -78,6 +111,31 @@ public class EnemySpawner : MonoBehaviour
         }
 
         UpdateAllEnemiesSpeed();
+    }
+
+    GameObject GetPrefabForGenre(MusicGenre genre)
+    {
+        switch (genre)
+        {
+            case MusicGenre.Rock:
+                return rockEnemyPrefab != null ? rockEnemyPrefab : defaultEnemyPrefab;
+
+            case MusicGenre.Pop:
+                return popEnemyPrefab != null ? popEnemyPrefab : defaultEnemyPrefab;
+
+            case MusicGenre.Rap:
+                return rapEnemyPrefab != null ? rapEnemyPrefab : defaultEnemyPrefab;
+
+            case MusicGenre.Classic:
+                return classicEnemyPrefab != null ? classicEnemyPrefab : defaultEnemyPrefab;
+
+            case MusicGenre.Country:
+                return countryEnemyPrefab != null ? countryEnemyPrefab : defaultEnemyPrefab;
+
+            case MusicGenre.Default:
+            default:
+                return defaultEnemyPrefab != null ? defaultEnemyPrefab : enemyPrefab;
+        }
     }
 
     int GetSpawnCount(float energy)
@@ -112,6 +170,8 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        
+        
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
             Debug.LogWarning("EnemySpawner: No spawnPoints assigned!");
@@ -167,7 +227,15 @@ public class EnemySpawner : MonoBehaviour
 
             usedPositions.Add(spawnPos);
 
-            GameObject obj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+            GameObject prefabToUse = GetPrefabForGenre(currentGenre);
+            if (prefabToUse == null)
+            {
+                Debug.LogWarning("EnemySpawner: No prefab assigned for current genre, skipping spawn.");
+                continue;
+            }
+
+            GameObject obj = Instantiate(prefabToUse, spawnPos, Quaternion.identity);
+
 
             float speed = GetEnemySpeed(energy);
             Enemy enemyComp = obj.GetComponent<Enemy>();

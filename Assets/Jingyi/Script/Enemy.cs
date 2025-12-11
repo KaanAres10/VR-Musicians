@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 3f;
-    public float jumpTriggerDistance = 3f;
+    public float jumpTriggerDistance = 6f;
     public float idleTriggerDistance = 1.2f; // VERY close to player (must be < jumpTriggerDistance)
     public float deathDelay = 1.0f;
     public float rotationSpeed = 5f;
@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
         if (rightHandHaptics == null)
         {
             // Look for the RightHand controller in the scene
-            var rightHand = GameObject.Find("RightHand Controller");
+            var rightHand = GameObject.Find("Right Controller");
 
             if (rightHand != null)
             {
@@ -121,47 +121,7 @@ public class Enemy : MonoBehaviour
 
         float dist = Vector3.Distance(transform.position, player.position);
 
-        // ---------- STATE LOGIC ----------
-        if (dist <= idleTriggerDistance)
-        {
-            // VERY CLOSE -> IDLE (after jump)
-            if (!isIdle)
-            {
-                isIdle   = true;
-                isJumping = false;
-
-                animator.SetBool("IsIdle", true);
-                animator.SetBool("IsJumping", true);
-                animator.SetBool("IsWalking", false);
-            }
-        }
-        else if (dist <= jumpTriggerDistance)
-        {
-            // CLOSE -> JUMP
-            if (!isJumping)
-            {
-                isJumping = true;
-                isIdle    = false;
-
-                animator.SetBool("IsJumping", true);
-                animator.SetBool("IsIdle", false);
-                animator.SetBool("IsWalking", false);
-            }
-        }
-        else
-        {
-            // FAR -> WALK
-            if (isIdle || isJumping)
-            {
-                isIdle    = false;
-                isJumping = false;
-
-                animator.SetBool("IsIdle", false);
-                animator.SetBool("IsJumping", false);
-                animator.SetBool("IsWalking", true);
-            }
-        }
-
+        
         // Move only when not idle
         if (!isIdle)
         {

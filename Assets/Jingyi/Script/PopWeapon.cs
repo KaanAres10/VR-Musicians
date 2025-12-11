@@ -3,6 +3,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
+using UnityEngine.SceneManagement;
+
+
 [RequireComponent(typeof(Rigidbody), typeof(XRGrabInteractable))]
 public class PopWeapon : MonoBehaviour
 {
@@ -37,6 +40,38 @@ public class PopWeapon : MonoBehaviour
 
     private float currentValue = 0f;
     private float cycleTimer = 0f;
+    
+    [Header("Scene Cleanup")]
+    public string allowedSceneName = "Env_Pop";
+    
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // If we changed to a scene that is NOT the pop scene, destroy this PopWeapon
+        if (!string.IsNullOrEmpty(allowedSceneName) && scene.name != allowedSceneName)
+        {
+            // If currently held, force deselect before destroying (safer for XRITK)
+            if (grabInteractable != null && grabInteractable.isSelected)
+            {
+                IXRSelectInteractable interactable = grabInteractable;
+
+                grabInteractable.interactionManager?
+                    .CancelInteractableSelection(interactable);
+            }
+
+            Debug.Log($"[PopWeapon] Scene changed to {scene.name}, destroying PopWeapon.");
+            Destroy(gameObject);
+        }
+    }
 
     private void Awake()
     {
