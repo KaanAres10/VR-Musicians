@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject tipPanel;
     
     [Header("Tip Settings")]
-    public float tipDuration = 3f;
+    public float tipDuration = 5f;
     private float tipTimer = 0f;   
     
     void Start()

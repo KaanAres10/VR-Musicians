@@ -92,7 +92,7 @@ public class TrackGenreReader : MonoBehaviour
     private static readonly string[] CountryKeywords = new[]
     {
         "country", "alt-country", "country pop", "country rock", "bluegrass",
-        "folk country", "americana", "modern country"
+        "folk country", "americana", "modern country", "folk"
     };
     
     [Header("Auto Skip / Time Limit")]
@@ -695,6 +695,7 @@ public class TrackGenreReader : MonoBehaviour
     ("yiruma", MusicGenre.Classic),
     ("max richter", MusicGenre.Classic),
     ("ennio morricone", MusicGenre.Classic),
+    ("carlos rafael rivera", MusicGenre.Classic),
 };
     
   private ReccoAudioFeatures GetDefaultFeaturesForGenre(MusicGenre genre, string trackId = null)

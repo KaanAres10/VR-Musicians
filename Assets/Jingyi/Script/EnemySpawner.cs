@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static TrackGenreReader;
 
@@ -11,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
     private float energy;
 
     [Header("Spawn Settings")]
-    public Transform[] spawnPoints;            // ← Set these in Inspector
+    public Transform[] spawnPoints;            
     public float spawnRadius = 2f;             // small random offset around each spawn point
     public float spawnInterval = 1.5f;
 
@@ -22,9 +23,33 @@ public class EnemySpawner : MonoBehaviour
 
     public float minSpawnDistanceBetweenEnemies = 2f;
     
+
+    public MusicGenre currentGenre = MusicGenre.Default;
+
+    Dictionary<MusicGenre, float> spawnMultipliers = new Dictionary<MusicGenre, float>()
+    {
+        { MusicGenre.Rock, 2.5f },
+        { MusicGenre.Pop, 1.5f },
+        { MusicGenre.Rap, 1.5f },
+        { MusicGenre.Classic, 1.1f },
+        { MusicGenre.Country, 1.2f }
+    };
+
+    Dictionary<MusicGenre, float> speedMultipliers = new Dictionary<MusicGenre, float>()
+    {
+        { MusicGenre.Rock, 2f },
+        { MusicGenre.Pop, 1.3f },
+        { MusicGenre.Rap, 1.5f },
+        { MusicGenre.Classic, 0.9f },
+        { MusicGenre.Country, 1.1f }
+    };
+
+    
     
     void Update()
     {
+        currentGenre = trackReader.getCurrentGenre();
+        
         // Automatically find all objects tagged "EnemySpawn"
         GameObject[] points = GameObject.FindGameObjectsWithTag("EnemySpawn");
 
@@ -55,27 +80,33 @@ public class EnemySpawner : MonoBehaviour
 
     int GetSpawnCount(float energy)
     {
+        float baseCount;
+
         if (energy < 0.7f)
-        {
-            return Mathf.CeilToInt(1 + 3 * energy);
-        }
+            baseCount = 1 + 2 * energy;
         else
-        {
-            return Mathf.CeilToInt(2 + 5 * energy);
-        }
+            baseCount = 2 + 3 * energy;
+
+        float genreMultiplier = spawnMultipliers[currentGenre];
+
+        return Mathf.CeilToInt(baseCount * genreMultiplier);
     }
+
 
     float GetEnemySpeed(float energy)
     {
+        float baseSpeed;
+
         if (energy < 0.7f)
-        {
-            return 1f + 1f * energy;
-        }
+            baseSpeed = 0.5f + 1f * energy;
         else
-        {
-            return 1.5f + 1.5f * energy;
-        }
+            baseSpeed = 1f + 1.5f * energy;
+
+        float genreMultiplier = speedMultipliers[currentGenre];
+
+        return baseSpeed * genreMultiplier;
     }
+
 
     void SpawnEnemy()
     {
