@@ -67,7 +67,7 @@ public class TrackGenreReader : MonoBehaviour
     {
         "rock", "hard rock", "alt rock", "alternative rock", "classic rock", "indie rock",
         "metal", "heavy metal", "punk rock", "garage rock", "grunge", "post-rock",
-        "progressive rock", "prog rock", "psychedelic rock"
+        "progressive rock", "prog rock", "psychedelic rock", "punk"
     };
 
     private static readonly string[] PopKeywords = new[]
@@ -654,6 +654,7 @@ public class TrackGenreReader : MonoBehaviour
     ("linkin park", MusicGenre.Rock),
     ("red hot chili peppers", MusicGenre.Rock),
     ("imagine dragons", MusicGenre.Rock),
+    ("the cranberries", MusicGenre.Rock),
 
     // RAP / HIP-HOP
     ("eminem", MusicGenre.Rap),
@@ -682,6 +683,7 @@ public class TrackGenreReader : MonoBehaviour
     ("dolly parton", MusicGenre.Country),
     ("shania twain", MusicGenre.Country),
     ("rednex", MusicGenre.Country),
+    ("billy ray cyrus", MusicGenre.Country),
 
     // CLASSIC / SOUNDTRACK
     ("hans zimmer", MusicGenre.Classic),

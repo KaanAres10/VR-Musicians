@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+// for HapticImpulsePlayer
+
 
 public class Enemy : MonoBehaviour
 {
@@ -19,12 +22,27 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     
     [Header("Attack")]
-    public float damageInterval = 0.3f;   // hit every 0.3 sec
+    public float damageInterval = 1.0f;   // hit every 0.3 sec
     public float damageAmount = 3;          // 3 damage each hit
     private float damageTimer = 0f;
     
     [Header("Music / Genre")]
     public TrackGenreReader trackReader; 
+    
+    [Header("Hit Settings")]
+    public string batTag = "PlayerBat";
+
+    [Header("Haptics (Right Hand)")]
+    public HapticImpulsePlayer rightHandHaptics;  // drag right controller's HapticImpulsePlayer
+    public float hapticAmplitude = 1f;
+    public float hapticDuration = 0.12f;
+
+    [Header("Knockback")]
+    public float knockbackForce = 25f;
+    public float upForce = 3f;
+
+
+
 
     void Awake()
     {
@@ -65,7 +83,24 @@ public class Enemy : MonoBehaviour
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsIdle", false);
         }
+        
+        if (rightHandHaptics == null)
+        {
+            // Look for the RightHand controller in the scene
+            var rightHand = GameObject.Find("RightHand Controller");
+
+            if (rightHand != null)
+            {
+                rightHandHaptics = rightHand.GetComponent<HapticImpulsePlayer>();
+            }
+
+            if (rightHandHaptics == null)
+            {
+                Debug.LogWarning($"Enemy {name}: Could not find RightHand HapticImpulsePlayer!");
+            }
+        }
     }
+    
 
     void Update()
     {
@@ -138,12 +173,10 @@ public class Enemy : MonoBehaviour
         if (currentGenre == MusicGenre.Classic || currentGenre == MusicGenre.Country)
         {
             damageAmount = 0.1f;
-            Debug.Log(damageAmount);
         }
         else
         {
             damageAmount = 3;
-            Debug.Log(damageAmount);
 
         }
 
@@ -160,7 +193,6 @@ public class Enemy : MonoBehaviour
             animator.SetBool("IsWalking", false);
             animator.SetBool("IsJumping", false);
             animator.SetBool("IsIdle", false);
-            animator.SetTrigger("Die");
         }
 
         Collider col = GetComponent<Collider>();
@@ -173,14 +205,33 @@ public class Enemy : MonoBehaviour
     {
         speed = newSpeed;
     }
+    
     void OnCollisionEnter(Collision col)
     {
         if (isDead) return;
 
         if (col.collider.CompareTag("PopWeapon") || col.collider.CompareTag("PlayerBat"))
         {
+            Debug.Log("Bat Hit");
             GameManager.Instance.AddScore(1);
             Die();
+            
+            if (rightHandHaptics != null)
+            {
+                float strength = Mathf.Clamp01(col.relativeVelocity.magnitude / 5f);
+                rightHandHaptics.SendHapticImpulse(hapticAmplitude * strength, hapticDuration);
+            }
+            
+            if (rb != null)
+            {
+                // from bat to enemy
+                Vector3 dir = transform.position - col.transform.position;
+
+                dir.y += upForce;     // give it some upward arc
+                dir.Normalize();
+
+                rb.AddForce(dir * knockbackForce, ForceMode.Impulse);
+            }
         }
     }
     

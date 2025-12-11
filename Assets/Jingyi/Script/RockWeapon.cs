@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;   // XR input system
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 
 public class RockWeapon : MonoBehaviour
 {
@@ -25,11 +26,18 @@ public class RockWeapon : MonoBehaviour
 
     [Header("VFX")]
     public GameObject muzzleFlashPrefab;
-    
+
     [Header("Enemy Hit VFX (Random Pick)")]
     public GameObject[] enemyHitVfxPrefabs;  
 
-    
+    [Header("Haptics (Right Hand)")]
+    public HapticImpulsePlayer rightHandHaptics;  // right controller's HapticImpulsePlayer
+    public float hapticAmplitude = 1f;
+    public float hapticDuration = 0.12f;
+
+    [Header("Knockback")]
+    public float knockbackForce = 25f;
+    public float upForce = 3f;
 
     private void Start()
     {
@@ -37,6 +45,14 @@ public class RockWeapon : MonoBehaviour
         {
             lineRenderer.positionCount = 2;
             lineRenderer.enabled = true;    // always visible
+        }
+
+        // Optional: auto-find right hand haptics if not set
+        if (rightHandHaptics == null)
+        {
+            var rightHand = GameObject.Find("RightHand Controller");
+            if (rightHand != null)
+                rightHandHaptics = rightHand.GetComponent<HapticImpulsePlayer>();
         }
     }
 
@@ -75,7 +91,7 @@ public class RockWeapon : MonoBehaviour
             lineRenderer.startColor = c;
             lineRenderer.endColor = c;
 
-// Also update material color (URP/HDRP often uses this instead)
+            // Also update material color (URP/HDRP often uses this instead)
             if (lineRenderer.material != null)
             {
                 if (lineRenderer.material.HasProperty("_BaseColor"))
@@ -94,10 +110,9 @@ public class RockWeapon : MonoBehaviour
 
         if (triggerHeld && Time.time >= nextFireTime)
         {
-            Shoot(hitSomething, hitEnemy ? hit.collider : null, endPoint);
+            Shoot(hitSomething, hitSomething ? hit.collider : null, hitSomething ? hit.point : (laserPoint.position + laserPoint.forward * maxDistance));
             nextFireTime = Time.time + fireRate;
         }
-        
     }
 
     private void Shoot(bool hitSomething, Collider hitCollider, Vector3 hitPoint)
@@ -105,10 +120,12 @@ public class RockWeapon : MonoBehaviour
         // Damage enemy ONLY if ray is on an enemy when you fire
         bool hitEnemy = hitSomething && hitCollider != null && hitCollider.CompareTag(enemyTag);
 
-        // Damage enemy ONLY if ray is on an enemy when you fire
         if (hitEnemy)
         {
-            // Pick random VFX from array
+            // Get rigidbody once (attachedRigidbody handles child colliders nicely)
+            Rigidbody rb = hitCollider.attachedRigidbody;
+
+            // 1) Enemy hit VFX
             if (enemyHitVfxPrefabs != null && enemyHitVfxPrefabs.Length > 0)
             {
                 int index = Random.Range(0, enemyHitVfxPrefabs.Length);
@@ -122,22 +139,43 @@ public class RockWeapon : MonoBehaviour
                 }
             }
 
+            // 2) Score
             GameManager.Instance.AddScore(1);
+
+            // 3) Haptics (simple strong pulse – raycast doesn’t really have "velocity")
+            if (rightHandHaptics != null)
+            {
+                Debug.Log("here");
+                if (rightHandHaptics.SendHapticImpulse(hapticAmplitude, hapticDuration))
+                {
+                    Debug.Log("Haptic Impulse");
+                }
+            }
+
+            // 4) Knockback BEFORE destroy (if enemy has Rigidbody)
+            if (rb != null)
+            {
+                // Direction from gun to enemy, with upward lift
+                Vector3 dir = (hitCollider.transform.position - laserPoint.position).normalized;
+                dir.y += upForce;
+                dir.Normalize();
+
+                rb.AddForce(dir * knockbackForce, ForceMode.Impulse);
+            }
+
+            // 5) Destroy enemy after effects
             Destroy(hitCollider.gameObject);
         }
-
 
         // Sound
         if (gunAudio != null)
         {
             gunAudio.Play();
-            Debug.Log("Audio playing");
         }
         else
         {
             Debug.Log("No audio source found");
         }
-  
 
         // Muzzle VFX at the gun
         if (muzzleFlashPrefab != null)
@@ -147,6 +185,5 @@ public class RockWeapon : MonoBehaviour
             vfx.transform.localRotation = Quaternion.Euler(0f, 270f, 0f); 
             Destroy(vfx, 0.1f);
         }
-        
     }
 }

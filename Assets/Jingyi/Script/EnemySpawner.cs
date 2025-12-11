@@ -32,7 +32,8 @@ public class EnemySpawner : MonoBehaviour
         { MusicGenre.Pop, 1.5f },
         { MusicGenre.Rap, 1.5f },
         { MusicGenre.Classic, 1.1f },
-        { MusicGenre.Country, 1.2f }
+        { MusicGenre.Country, 1.2f },
+        { MusicGenre.Default, 1.0f }
     };
 
     Dictionary<MusicGenre, float> speedMultipliers = new Dictionary<MusicGenre, float>()
@@ -41,7 +42,8 @@ public class EnemySpawner : MonoBehaviour
         { MusicGenre.Pop, 1.3f },
         { MusicGenre.Rap, 1.5f },
         { MusicGenre.Classic, 0.9f },
-        { MusicGenre.Country, 1.1f }
+        { MusicGenre.Country, 1.1f },
+        { MusicGenre.Default, 1.0f }
     };
 
     
