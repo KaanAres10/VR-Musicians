@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            damageAmount = 3;
+            damageAmount = 2.5f;
 
         }
 

@@ -4329,7 +4329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10a31db63c698947868941c4adb5be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  gameDuration: 180
+  gameDuration: 240
   defaultScoreMultiplier: 1
   randomSongsMultiplier: 2
   score: 0
@@ -7323,8 +7323,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.21311443, y: 0.60494196, z: 0.10158508}
-  m_Center: {x: 0, y: 0.29620063, z: -0.009019658}
+  m_Size: {x: 0.25639287, y: 0.7502528, z: 0.13525312}
+  m_Center: {x: -0.0011246293, y: 0.22354461, z: 0.0078136325}
 --- !u!1001 &1673867462
 PrefabInstance:
   m_ObjectHideFlags: 0

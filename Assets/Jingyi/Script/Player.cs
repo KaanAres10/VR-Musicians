@@ -72,13 +72,13 @@ public class Player : MonoBehaviour
 
     float recoverHealthSpeed(float energy)
     {
-        if (energy < 0.7f)
+        if (energy < 0.8f)
         {
             if (energy < 0.1f)
             {
-                return  1.0f / (5 * energy);
+                return  1.0f / (10 * energy);
             }
-            return 1.0f / (2 * energy);
+            return 1.0f / (energy);
         }
         else
         {
