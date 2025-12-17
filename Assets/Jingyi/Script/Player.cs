@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
             {
                 return  1.0f / (10 * energy);
             }
-            return 1.0f / (energy);
+            return 2.0f / (energy);
         }
         else
         {

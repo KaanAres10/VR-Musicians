@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody rb;
     
     [Header("Attack")]
-    public float damageInterval = 1.0f;   // hit every 0.3 sec
+    public float damageInterval = 3.0f;   // hit every 0.3 sec
     public float damageAmount = 3;          // 3 damage each hit
     private float damageTimer = 0f;
     
@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            damageAmount = 2.5f;
+            damageAmount = 2.0f;
 
         }
 

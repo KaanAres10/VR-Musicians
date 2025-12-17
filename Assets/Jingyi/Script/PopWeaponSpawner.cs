@@ -8,7 +8,7 @@ public class PopWeaponSpawner : MonoBehaviour
     public GameObject ballPrefab;
 
     [Tooltip("How many balls to spawn around the player initially.")]
-    public int initialBallCount = 6;
+    public int initialBallCount = 4;
 
     [Tooltip("Maximum number of balls alive at once (for respawn).")]
     public int maxBalls = 10;
@@ -18,7 +18,7 @@ public class PopWeaponSpawner : MonoBehaviour
     public Transform playerCenter;
 
     [Tooltip("Horizontal radius from the player.")]
-    public float radius = 5.0f;
+    public float radius = 3.0f;
 
     [Tooltip("Height offset from player center (e.g. chest height).")]
     public float heightOffset = 0.5f;
