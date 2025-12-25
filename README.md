@@ -1,6 +1,6 @@
 # VR Musicians
 
-A **two player asymmetric VR experience** where **music directly controls gameplay**.
+A VR experience where **music directly controls gameplay**.
 
 ![Cover](Docs/cover.jpg)
 
