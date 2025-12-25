@@ -64,7 +64,7 @@ Each genre has a **unique environment, weapon, and gameplay mechanic**:
   - Roll it like a bowling ball
   - Release to launch at enemies
 - **Gameplay:** Physics Based combat
-- - **Mechanics:**
+- **Mechanics:**
   - Increased enemy spawns
   - No health regeneration
   - Score-focused playstyle
