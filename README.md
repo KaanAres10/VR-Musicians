@@ -4,7 +4,7 @@ A **two player asymmetric VR experience** where **music directly controls gamepl
 
 ![Cover](Docs/cover.jpg)
 
-In this project, **one player selects a Spotify song**, while **the other plays in VR**. The VR world dynamically reacts to the **genre and energy** of the selected music in real time changing environments, post processing effects, and gameplay. This creates a unique interactive experience where **music becomes a gameplay mechanic**, and one player directly influences the other through song choice.
+In this project, **one player selects a Spotify song**, while **the other plays in VR**. The VR world dynamically reacts to the **genre and energy** of the selected music in real time changing environments, post processing effects, and gameplay. This creates a unique interactive experience where **music becomes a gameplay mechanic**, and one player directly influences the other through song of choice.
 
 ---
 
@@ -15,11 +15,10 @@ In this project, **one player selects a Spotify song**, while **the other plays 
 ## Core Concept
 
 ### Player 1: VR Player
-- Experiences a VR world and gameplay for selected track
+- Experiences a VR world and gameplay for selected song
 
 ### Player 2: Music Controller
-- Selects songs from Spotify playlists  
-- Can choose **genre-specific playlists** or a **random playlist**
+- Selects songs from Spotify  
 
 As the song changes:
 - Environment themes switch
