@@ -140,9 +140,20 @@ This introduces **risk reward gameplay**.
 
 ---
 
+## Production Process
+https://github.com/user-attachments/assets/9ede4673-b648-4a1f-b367-342cfded5cf1
+
+---
 ## Tech Stack
 
 - **Engine:** Unity 6  
 - **VR:** Meta Quest  
 - **Music Data:** Spotify Web API, ReccoBeats  
 - **Platform:** PCVR
+
+## Authors
+- Emmy Klum
+- Jingyi Yan
+- Kaan Altıntaş
+- Yulu Zhang
+- Shangwen Wang
